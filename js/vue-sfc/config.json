@@ -1,0 +1,12 @@
+{
+  "elements": {
+    "T": 25,
+    "count": 50,
+    "areaHeight": 150,
+    "riverBackTimeRatio": 0.8
+  },
+  "highlightWrongTimeout": 2000,
+  "river": {
+    "width": 3000
+  }
+}

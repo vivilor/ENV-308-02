@@ -1,0 +1,11 @@
+@font-face {
+	font-family: 'ConquerorSansExtraBold';
+	src: url('ConquerorSans-ExtraBold.eot');
+	src:
+	     url('ConquerorSans-ExtraBold.eot?#iefix') format('embedded-opentype'),
+	     url('ConquerorSans-ExtraBold.woff') format('woff'),
+	     url('ConquerorSans-ExtraBold.ttf') format('truetype'),
+	     url('ConquerorSans-ExtraBold.svg#ConquerorSansExtraBold') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
