@@ -4,6 +4,7 @@ import AppWorkfield from "vue-sfc/app-workfield.vue"
 
 import Content from "locale/ru-ru.json"
 
+window.anime = require('animejs');
 window.$ = require('jquery');
 require('webpack-jquery-ui/draggable');
 require('webpack-jquery-ui/droppable');

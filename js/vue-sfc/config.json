@@ -1,8 +1,25 @@
 {
   "elements": {
-    "T": 25,
-    "count": 50,
-    "areaHeight": 150,
+    "zIndex": 30,
+    "T": 25000,
+    "oscillationOffset": 20,
+    "count": 35,
+    "offsetRatio": 0.7,
+    "space": {
+      "upper": 40,
+      "lower": 50
+    },
+    "offset": {
+      "upper": 90,
+      "lower": 0
+    },
+    "catch": {
+      "place": {
+        "top": 340,
+        "left": 250
+      },
+      "offset": 30
+    },
     "riverBackTimeRatio": 0.8
   },
   "highlightWrongTimeout": 2000,

@@ -56,6 +56,5 @@ module.exports = {
   },
   plugins: [
     ExtractCSS
-  ],
-  devtool: "eval-source-map"
+  ]
 };

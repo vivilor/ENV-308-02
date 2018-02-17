@@ -120,6 +120,7 @@
       onRestartButtonClick() {
         this.currentStep = 1;
         this.completed = false;
+        this.eventBus.$emit(VueEvents.step.change, this.currentStep);
         this.eventBus.$emit(VueEvents.global.restart);
       },
       
@@ -153,6 +154,10 @@
   .step2-leave-active { transition: .1s linear }
   .step2-leave-to     { opacity: 0 }
   
+  #steps-content-wrapper {
+    height: 474px;
+  }
+  
   div#app-workfield-wrapper {
     
     // TODO: Don't use size constants
@@ -166,6 +171,7 @@
       height: 542px;
       margin: 22px 34px 36px 34px;
       position: relative;
+      /*overflow: hidden;*/
       
       & > h1 {
         margin: 0 0 10px 0;
