@@ -100,7 +100,7 @@
         let pos = this.fixPosition(this.$trap(trapIndex).position());
         
         this.$pairSecondLabel = this.createLabel(text, -1).hide();
-        this.getWrapper().append(
+        this.$wrapper().append(
           this.$pairSecondLabel
             .css(pos)
             .addClass(this.classes.correct)
@@ -199,13 +199,17 @@
         }
       },
       
-      isNotTrappedLabel(labelIndex) {
+      isNotCorrectLabel(labelIndex) {
         return this.content.traps.correct.indexOf(labelIndex) === -1;
+      },
+  
+      isNotTrappedLabel(labelIndex) {
+        return this.trapped.indexOf(labelIndex) === -1;
       },
       
       removeWrongLabels() {
         for (let i = 0; i < this.content.labels.length; i++) {
-          if (this.isNotTrappedLabel(i)) {
+          if (this.isNotCorrectLabel(i)) {
             this.$label(i).remove();
           }
         }
@@ -241,6 +245,7 @@
       },
       
       calcOriginalLabelPosition(labelIndex) {
+        console.log('hi');
         return {
           top: Config.labels[0].top + labelIndex * (Config.labels[0].space),
           left: Config.labels[0].left
@@ -266,12 +271,12 @@
         return $el.data(this.keys.labelIndex);
       },
       
-      getWrapper() {
+      $wrapper() {
         return $(`#${this.classes._wrapper}`);
       },
       
       placeLabel($el, labelIndex) {
-        this.getWrapper().append(
+        this.$wrapper().append(
           $el.css(
             this.calcOriginalLabelPosition(labelIndex)
           )
@@ -299,6 +304,10 @@
       
       removeTrappedMark(trapIndex) {
         this.$set(this.trapped, trapIndex, -1);
+      },
+      
+      removeTrappedMarkFromLabel(labelIndex) {
+        this.$set(this.trapped, this.trapped.indexOf(labelIndex), -1);
       },
       
       removeLabelFromPrevTrap(labelIndex) {
@@ -384,9 +393,25 @@
        */
       
       makeLabelsDraggable() {
+        let _this = this;
         $(`.${this.classes.label}`).draggable({
           zIndex: 1000,
-          revert: "invalid",
+          revert: function(droppable) {
+            let labelIndex = _this.getLabelIndex(this);
+            if (!droppable) {
+              console.log('No droppable');
+              if (_this.isNotTrappedLabel(labelIndex)) {
+                console.log('Not from trap');
+                return true;
+              } else {
+                console.log('From trap');
+                _this.removeTrappedMarkFromLabel(labelIndex);
+                _this.returnLabel(this);
+                return false;
+              }
+            }
+            return false;
+          },
           cursor: 'url("../../img/cursors/grabbing.png"), pointer',
           revertDuration: Config.animation.duration,
           start: (ev, ui) => this.onLabelDragStart(ev, ui),
@@ -421,6 +446,10 @@
   
       hasEmptyTrap(trapped) {
         return trapped.indexOf(-1) !== -1;
+      },
+      
+      isLabelInTrap($el, trapIndex) {
+        return this.getLabelIndex($el) === this.trapped[trapIndex]
       },
       
       getSequence() {
@@ -509,14 +538,16 @@
       
       onLabelDrop(ev, ui) {
         let $trap = $(ev.target);
+        let $label = ui.draggable;
         let trapIndex = this.getTrapIndex($trap);
     
         if (this.hasLabel($trap)) {
           this.disableShadowOnTrappedLabel($trap);
-          this.returnLabel(this.getTrappedLabel(trapIndex));
-          this.removeTrappedMark(trapIndex);
+          if (!this.isLabelInTrap($label, trapIndex)) {
+            this.returnLabel(this.getTrappedLabel(trapIndex));
+            this.removeTrappedMark(trapIndex);
+          }
         }
-    
         this.trapLabel(ev, ui);
       },
   

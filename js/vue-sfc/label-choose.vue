@@ -4,7 +4,7 @@
       div.label-answer(
         v-for="(label, i) in content.labels",
         v-html="label",
-        :class="renderLabelClasses(i)",
+        :class="setLabelClasses(i)",
         :data-labelindex="i",
         @click="onLabelClick(i)",
         @mouseleave="onLabelMouseLeave(i)",
@@ -25,7 +25,7 @@
   import VueEvents from "../events"
   import Config from "./config.json"
   
-  // import Anime from "animejs"
+  import Anime from "animejs"
   
   export default {
     name: "label-choose",
@@ -53,8 +53,11 @@
           correct: false,
           wrong: false
         },
+        
         animating: false,
+        
         sequence: null,
+        
         id: {
           _wrapper: "LabelChoose-wrapper",
           question: "question",
@@ -64,15 +67,15 @@
             static: "river-static",
           },
         },
+        
         classes: {
           wrap: "wrap",
           hover: "hover",
           elements: ['e1', 'l1', 'tr2', 'l2', 'e3', 'tr1', 'l3','e2']
         },
+        
         elements: {
-          outer: [],
-          inner: [],
-          river: {
+          $river: {
             back: null,
             front: null,
           }
@@ -82,56 +85,87 @@
     },
     mounted() {
       this.handleEvents();
+      this.cacheData();
     },
     methods: {
-      /**
-       * DOM-manuipulations
-       */
+      /** Utilties ***********************************************************/
 
-      $div() {
-        return $(document.createElement('div'));
+      randomize(max) {
+        // window.randomize = this.randomize;
+        return Math.round((Math.random() * max * 1e2) % max);
       },
       
-      $element($el) {
-        return $el.find('div');
+      cacheData() {
+        console.log(this);
+        this.elements.$river.back = $(`#${this.id.river.back}`);
+        this.elements.$river.front = $(`#${this.id.river.front}`);
+      },
+      
+      /** DOM-render functions ***********************************************/
+
+      $renderDiv() {
+        return $(document.createElement('div'));
+      },
+  
+      $renderQuestion() {
+        return this.$renderDiv()
+          .attr('id', this.id.question)
+          .html(this.currentQuestionText())
+          .css({ opacity: 1 });
+      },
+      
+      /** jQuery DOM getters *************************************************/
+      
+      $elementsByType(index) {
+        let $elements;
+        switch (index) {
+          case 0: $elements = $('#river-back, #river-front, #river-static'); break;
+          case 1: $elements = $('.tr1, .tr2'); break;
+          case 2: $elements = $('.l1, .l2, .l3'); break;
+          case 3: $elements = $('.e1, .e2, .e3'); break;
+        }
+        return $elements;
+      },
+      
+      $elementsAll() {
+        return $(`.${this.classes.elements.join(',')}`);
+      },
+      
+      $element(index) {
+        return this.$wrap(index).find('div');
       },
   
       $wrap(index) {
         return $(`.wrap[data-index=${index}]`);
       },
       
-      getQuestionEl() {
-        return document.querySelector(`#${this.id.question}`);
+      $wraps() {
+        return $(`.${this.classes.wrap}`);
+      },
+  
+      $question() {
+        return $(`#${this.id.question}`);
       },
       
-      getHTMLObject($el) {
+      /** DOM, content and style control *************************************/
+      
+      currentQuestionText() {
+        return this.content.items[this.sequence[this.answer.step]]
+      },
+      
+      raw($el) {
         return $el[0];
       },
-      
-      renderQuestion() {
-        $(`#${this.id._wrapper}`).append(
-          this.$div()
-            .attr('id', this.id.question)
-            .html(this.content.items[this.sequence[this.answer.step]])
-            .css({
-              opacity: 1
-            })
-        )
-      },
-      
-      renderLabelClasses(i) {
+  
+      setLabelClasses(i) {
         return {
           wrong: this.highlight.wrong && i === this.answer.index,
           correct: this.highlight.correct && i === this.answer.index
         }
       },
       
-      elementSelector($el) {
-        return `.wrap:nth-child(${$el.data('index') + 1}) > div`;
-      },
-      
-      elementWrapSelector($el) {
-        return `.wrap:nth-child(${$el.data('index') + 1})`;
+      placeQuestion() {
+        this.$wrapper().append(this.$renderQuestion());
       },
       
       placeElement($el, ops) {
@@ -140,11 +174,6 @@
       
       randomizeClass() {
         return this.classes.elements[this.randomize(this.classes.elements.length)];
-      },
-      
-      randomize(max) {
-        // window.randomize = this.randomize;
-        return Math.round((Math.random() * max * 1e2) % max);
       },
       
       countLeftOffset(i) {
@@ -161,124 +190,117 @@
           this.randomize(this.config.elements.space.lower);
       },
       
-      currentAnswerElements(i) {
-        let $elements;
-        switch (i) {
-          case 0: $elements = $('#river-back, #river-front, #river-static'); break;
-          case 1: $elements = $('.tr1, .tr2'); break;
-          case 2: $elements = $('.l1, .l2, .l3'); break;
-          case 3: $elements = $('.e1, .e2, .e3'); break;
-        }
-        return $elements;
-      },
-      
-      pauseElementAnimation(index) {
+      stopElementAnimation(index) {
         this.elements.outer[index].pause();
         this.elements.inner[index].pause();
       },
-  
-      playElementAnimation(index) {
-        this.elements.outer[index].play();
-        this.elements.inner[index].play();
-      },
       
       applyWrapAnimation($el, offsetFromStart) {
-        let offsetToEnd = this.config.river.width - offsetFromStart;
-        
-        let durationToEnd = this.config.elements.T * (offsetToEnd / this.config.river.width);
-        let durationFromStart = this.config.elements.T * (offsetFromStart / this.config.river.width);
-        
-        return anime({
-          loop: true,
-          easing: "linear",
-          targets: this.getHTMLObject($el),
-          duration: this.config.elements.T,
-          autoplay: false,
-          direction: "normal",
-          left: [
-            { value: this.config.river.width, duration: durationToEnd },
-            { value: 0, duration: 0 },
-            { value: offsetFromStart, duration: durationFromStart }
-          ],
-        });
+        // let offsetToEnd = this.config.river.width - offsetFromStart;
+        //
+        // let durationToEnd = this.config.elements.T * (offsetToEnd / this.config.river.width);
+        // let durationFromStart = this.config.elements.T * (offsetFromStart / this.config.river.width);
+      },
+      
+      applyElementAnimation($el) {
+        //   duration: this.config.elements.T / (10 + this.randomize(20)),
+        // });
+      },
+      
+      /** Animation renders **************************************************/
+      
+      /** River animation ****************************************************/
+
+      animateRiverBack() {
+        this.elements.$river.back
+          .css({ backgroundPositionX: 0 })
+          .animate(
+            { backgroundPositionX: 1645 },
+            this.config.elements.T,
+            "linear",
+            this.animateRiverBack
+          );
       },
   
-      applyElementAnimation($el) {
-        return anime({
-          loop: true,
-          targets: this.getHTMLObject($el),
-          easing: "easeInOutSine",
-          autoplay: false,
-          direction: "alternate",
-          // TODO: Remove constant (20)
-          duration: this.config.elements.T / (10 + this.randomize(20)),
-          translateY: this.config.elements.oscillationOffset
-        });
+      animateRiverFront() {
+        // TODO: Remove constants
+        this.elements.$river.front
+          .css({ backgroundPositionX: 0 })
+          .animate(
+            { backgroundPositionX: 1645 },
+            this.config.elements.T * 0.8,
+            "linear",
+            this.animateRiverFront
+          );
       },
       
-      /**
-       * Animation renders
-       */
       
-      pauseRiverAnimation() {
-        this.elements.river.back.pause();
-        this.elements.river.front.pause();
+      stopRiverAnimation() {
+        this.elements.$river.back.stop();
+        this.elements.$river.front.stop();
       },
       
       playRiverAnimation() {
-        this.elements.river.back.play();
-        this.elements.river.front.play();
+        this.animateRiverBack();
+        this.animateRiverFront();
       },
       
-      animateRiver() {
-        // TODO: remove constant (0.8)
-        this.elements.river.front = anime({
-          targets: `#${this.id.river.front}`,
-          easing: "linear", loop: true, duration: this.config.elements.T * 0.8,
-          backgroundPositionX: "1645px",
-        });
-  
-        this.elements.river.back = anime({
-          targets: `#${this.id.river.back}`,
-          easing: "linear", loop: true, duration: this.config.elements.T,
-          backgroundPositionX: "1645px",
-        });
+      /**
+       * River elements animation
+       */
+      
+      animateElementFromStart($el) {
+        let _this = this;
+        $el
+          .css({ left: 0 })
+          .animate(
+            { left: this.config.river.width },
+            this.config.elements.T,
+            "linear",
+            function() {
+              _this.animateElementFromStart($(this));
+            }
+          );
+      },
+      
+      animateElementFirstMovingToEnd($el, offsetFromStart) {
+        let _this = this;
+        let distanseToEnd = this.config.river.width - offsetFromStart;
+        let durationToEnd = this.config.elements.T * (distanseToEnd / this.config.river.width);
+        
+        $el.animate(
+          { left: `+=${distanseToEnd}` },
+          durationToEnd,
+          "linear",
+          function() {
+            _this.animateElementFromStart($(this));
+          }
+        )
       },
       
       animateRiverElements() {
         let $upper, $lower;
-        let upperElAnim, upperElWrapAnim,
-            lowerElAnim, lowerElWrapAnim;
         let offsetFromStart;
         
         for (let i = 0; i < this.config.elements.count; i++) {
-          // $upper = this.renderElement({ index: i * 2, class:  this.randomizeClass()});
-          // $lower = this.renderElement({ index: i * 2 + 1, class: this.randomizeClass()});
           offsetFromStart = this.countLeftOffset(i);
+          
           if (i % 2) {
             $lower = this.$wrap(i);
             this.placeElement($lower, {
               bottom: this.countLowerOffset(),
               left: offsetFromStart
             });
-            lowerElWrapAnim = this.applyWrapAnimation($lower, offsetFromStart);
-            lowerElAnim = this.applyElementAnimation(this.$element($lower));
+            this.animateElementFirstMovingToEnd($lower, offsetFromStart);
       
-            this.elements.outer.push( lowerElWrapAnim );
-            this.elements.inner.push( lowerElAnim );
           } else {
             $upper = this.$wrap(i);
             this.placeElement($upper, {
               bottom: this.countUpperOffset(),
               left: offsetFromStart
             });
-            upperElWrapAnim = this.applyWrapAnimation($upper, offsetFromStart);
-            upperElAnim = this.applyElementAnimation(this.$element($upper));
-      
-            this.elements.outer.push( upperElWrapAnim, );
-            this.elements.inner.push( upperElAnim, );
+            this.animateElementFirstMovingToEnd($upper, offsetFromStart);
           }
-          this.playElementAnimation(i);
         }
       },
       
@@ -291,118 +313,170 @@
         return $el.data('index');
       },
       
-      // TODO: refactor this function
-      catchQuestionAndWashItAway(i) {
-        this.animating = true;
-        
-        let _this = this;
-        let middlePoint = this.config.river.width / 2;
-        // TODO: remove constant (width of cropped workfield)...
-        let allowedRange = 892 / 2;
-        let $first, $second, firstIndex, secondIndex;
-        let leftOffset = this.config.river.width / 2
-          - allowedRange
-          + this.config.elements.catch.place.left;
-        let topOffset = this.config.elements.catch.place.top;
-  
-        anime({
+      /**
+       * Catch and wash away animation
+       */
+      
+      catchElement($el) {
+        $(this.$question()).append($el.removeAttr('style'))
+      },
+      
+      animeObjDropQuestion(leftOffset, topOffset) {
+        return {
           loop: false,
+          targets: `#${this.id.question}`,
           autoplay: true,
-          duration: 700,
-          targets: this.getQuestionEl(),
-          left: [{ value: leftOffset, easing: "easeOutSine" }],
-          top: [{ value: topOffset, easing: "easeInSine" }],
-        });
-        
-        if (i) {
-          let $elements = this.currentAnswerElements(i);
-          $elements.each((i, el) => {
-            if (this.distanceFromMiddle(el, middlePoint) < allowedRange) {
-              if (!$first) {
-                $first = $(el).parent().css({zIndex: 60});
-                firstIndex = this.getElementIndex($first);
-                return true
-              }
-              if (!$second) {
-                $second = $(el).parent().css({zIndex: 60});
-                secondIndex = this.getElementIndex($second);
-                return false
-              }
-            }
-          });
-    
-          // Catch question
-          let $question = $(this.getQuestionEl());
-          let secondOffsetX = $question.width() + leftOffset - this.config.elements.catch.offset;
-          let secondOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
-          let firstOffsetX = leftOffset - this.config.elements.catch.offset;
-          let firstOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
-  
-          this.pauseElementAnimation(firstIndex);
-          this.pauseElementAnimation(secondIndex);
-          
-          anime({
-              loop: false,
-              autoplay: false,
-              top: [{value: firstOffsetY, easing: "easeOutSine"}],
-              left: [{value: firstOffsetX, easing: "easeInSine"}],
-              targets: $first[0],
-              duration: 700,
-            }).play();
-          anime({
-              loop: false,
-              autoplay: false,
-              duration: 700,
-              top: [{value: secondOffsetY, easing: "easeOutSine"}],
-              left: [{value: secondOffsetX, easing: "easeInSine"}],
-              targets: $second[0],
-            }).play();
-            
-          setTimeout(() => {
-            $(this.getQuestionEl())
-              .append($first.removeAttr('style'))
-              .append($second.removeAttr('style'));
-          }, 700)
-        } else {
+          delay: 0,
+          translateX: [
+            { value: `+=${leftOffset}`,  duration: 5000, easing: "easeOutSine", elastisity: 100 }
+          ],
+          translateY: [
+            { value: `+=${topOffset}`, duration: 5000, easing: "easeInCubic", elastisity: 100 }
+          ],
+          rotate: [
+            { value: -50, duration: 1400, delay: 100, easing: "linear", elastisity: 100 },
+            { value: 0, duration: 3500, easing: "linear", elastisity: 100 },
+          ],
+          begin: () => console.log('Animation starts'),
+          complete: () => console.log('Animation finished'),
         }
-        
-        // Wash away
-        
-        anime({
+      },
+      
+      animeTimelineCatchAndWashAway($first, $second) {
+        return {
           loop: false,
-          targets: this.getQuestionEl(),
-          autoplay: false,
+          direction: "normal",
+          autoplay: true,
+          complete: () => {
+            if ($first && $second) {
+              this.catchElement($first);
+              this.catchElement($second);
+            }
+            anime(this.animeObjWashAway());
+          }
+        }
+      },
+      
+      // TODO: Remove constants!!!
+      animeObjWashAway() {
+        return {
+          loop: false,
+          targets: this.$question(),
+          autoplay: true,
+          direction: "normal",
           opacity: [
-            { value: 1, duration: 2000 },
-            { value: 0, duration: 700, easing: "linear" }
+            { value: 1, duration: 1600 },
+            { value: 0, duration: 400, easing: "easeInSine" }
           ],
     
           left: [
-            {value: leftOffset, duration: 700, easing: "easeOutSine" },
+            //{value: leftOffset, duration: 700, easing: "easeOutSine" },
             {value: '+=1000px', duration: 2000, easing: "easeInCubic"}
           ],
     
           top: [
-            {value: topOffset, duration: 700, easing: "easeInSine" },
+            //{value: topOffset, duration: 700, easing: "easeInSine" },
             {value: '+=30px', duration: 2000, easing: 'easeInCubic'}
           ],
     
           rotate: [
-            {value: '10deg', duration: 300, delay: 100, easing: "linear"},
-            {value: '0deg', duration: 400, easing: "linear"},
+            //{value: '10deg', duration: 300, delay: 100, easing: "linear"},
+            //{value: '0deg', duration: 400, easing: "linear"},
             {value: '4deg', duration: 500, delay: 200, easing: "linear"},
-            {value: '-2deg', duration: 600, easing: "linear"},
-            {value: '1deg', duration: 600, easing: "linear"},
+            {value: '-2deg', duration: 800, easing: "linear"},
+            {value: '1deg', duration: 800, easing: "linear"},
           ],
     
           complete: () => {
             this.animating = false;
-            $(this.getQuestionEl()).remove();
+            $(this.$question()).remove();
             this.answer.step++;
-            this.renderQuestion();
+            this.$renderQuestion();
             this.highlight.correct = false;
           }
-        }).play();
+        }
+      },
+      
+      animeObjCatchElement($el, offsetX, offsetY) {
+        return {
+          top: [{value: offsetY, easing: "easeOutSine"}],
+          left: [{value: offsetX, easing: "easeInSine"}],
+          offset: 0,
+          targets: $el[0],
+          duration: 700,
+        }
+      },
+      
+      /**
+       * Animation control
+       */
+      
+      stopAllAnimations() {
+        this.stopRiverAnimation();
+        // *TODO: Add stop for all elements
+      },
+  
+      playAllAnimations() {
+        this.playRiverAnimation();
+        // *TODO: Add play for all elements
+      },
+      
+      // TODO: refactor this function
+      catchQuestionAndWashItAway(labelIndex) {
+        anime(this.animeObjDropQuestion(300, 200));
+        // anime
+        //   .timeline(this.animeTimelineCatchAndWashAway())
+        //   .add(this.animeObjDropQuestion(1700, 300));
+        // this.animating = true;
+        //
+        // let _this = this;
+        // let middlePoint = this.config.river.width / 2;
+        // // TODO: remove constant (width of cropped workfield)...
+        // let allowedRange = 892 / 2;
+        // let $first, $second, firstIndex, secondIndex;
+        // let leftOffset = this.config.river.width / 2
+        //   - allowedRange
+        //   + this.config.elements.catch.place.left;
+        // let topOffset = this.config.elements.catch.place.top;
+        //
+        // if (labelIndex) {
+        //   let $elements = this.currentAnswerElements(labelIndex);
+        //   $elements.each((i, el) => {
+        //     if (this.distanceFromMiddle(el, middlePoint) < allowedRange) {
+        //       if (!$first) {
+        //         $first = $(el).parent().css({zIndex: 60});
+        //         firstIndex = this.getElementIndex($first);
+        //         return true
+        //       }
+        //       if (!$second) {
+        //         $second = $(el).parent().css({zIndex: 60});
+        //         secondIndex = this.getElementIndex($second);
+        //         return false
+        //       }
+        //     }
+        //   });
+        //
+        //   // Catch question
+        //   let $question = $(this.$question());
+        //   let secondOffsetX = $question.width() + leftOffset - this.config.elements.catch.offset;
+        //   let secondOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
+        //   let firstOffsetX = leftOffset - this.config.elements.catch.offset;
+        //   let firstOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
+        //
+        //   this.pauseElementAnimation(firstIndex);
+        //   this.pauseElementAnimation(secondIndex);
+        //
+        //   anime
+        //     .timeline(this.animeTimelineCatchAndWashAway($first, $second))
+        //     // .add(this.animeObjCatchElement($first, firstOffsetX, firstOffsetY))
+        //     // .add(this.animeObjCatchElement($second, secondOffsetX, secondOffsetY))
+        //     .add(this.animeObjDropQuestion(leftOffset, topOffset));
+        // } else {
+        //   anime
+        //     .timeline(this.animeTimelineCatchAndWashAway())
+        //     .add(this.animeObjDropQuestion(leftOffset, topOffset));
+        // }
+        
       },
   
       /**
@@ -410,29 +484,15 @@
        */
       
       turnHighlightOn(i) {
-        this.currentAnswerElements(i).addClass('hover');
+        this.$elementsByType(i).addClass('hover');
       },
   
       turnHighlightOff(i) {
-        this.currentAnswerElements(i).removeClass('hover');
+        this.$elementsByType(i).removeClass('hover');
       },
       
       correctAnswerIndex() {
         return this.content.correct.indexOf(this.sequence[this.answer.step]);
-      },
-      
-      pauseAllAnimations() {
-        this.pauseRiverAnimation();
-        for (let i = 0; i < this.config.elements.count; i++) {
-          this.pauseElementAnimation(i);
-        }
-      },
-  
-      playAllAnimations() {
-        this.playRiverAnimation();
-        for (let i = 0; i < this.config.elements.count; i++) {
-          this.playElementAnimation(i);
-        }
       },
   
       /**
@@ -447,23 +507,18 @@
       onStepChange(stepIndex) {
         switch (stepIndex) {
           case 2:
-            if (
-              this.elements.inner.length === this.config.elements.count &&
-              this.elements.inner.length === this.config.elements.count
-            )
-              this.playAllAnimations();
-            else
-              this.animateRiver();
-              this.animateRiverElements();
+            this.playRiverAnimation();
+            this.animateRiverElements();
             break;
           default:
             this.pauseAllAnimations();
+            break;
         }
       },
       
       onRecieveData(payload) {
         this.sequence = payload;
-        this.renderQuestion();
+        this.$renderQuestion();
       },
       
       onLabelMouseEnter(labelIndex) {
@@ -480,15 +535,15 @@
         this.answer.index = labelIndex;
         if (labelIndex === this.correctAnswerIndex()) {
           this.highlight.correct = true;
-          this.catchQuestionAndWashItAway(labelIndex);
+          // this.catchQuestionAndWashItAway(labelIndex);
         } else {
           this.highlight.wrong = true;
         }
       }
     },
     watch: {
-      'highlight.wrong': function(newV) {
-        if (newV) {
+      'highlight.wrong': function(newValue) {
+        if (newValue) {
           setTimeout(
             () => this.highlight.wrong = false,
             this.config.highlightWrongTimeout
