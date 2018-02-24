@@ -1,5 +1,6 @@
 {
-  "fallDuration": 700,
+  "fallDuration": 800,
+  "swimDuration": 2000,
   "elements": {
     "zIndex": 30,
     "T": 25000,

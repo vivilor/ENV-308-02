@@ -25414,13 +25414,6 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
         elements: ['e1', 'l1', 'tr2', 'l2', 'e3', 'tr1', 'l3','e2']
       },
       
-      elements: {
-        $river: {
-          back: null,
-          front: null,
-        }
-      },
-      
       dX: __WEBPACK_IMPORTED_MODULE_1__config_json___default.a.river.width / __WEBPACK_IMPORTED_MODULE_1__config_json___default.a.elements.count,
       
       hidden: '',
@@ -25438,15 +25431,15 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
       cache: {
         riverWidth: __WEBPACK_IMPORTED_MODULE_1__config_json___default.a.river.width,
         middlePoint: __WEBPACK_IMPORTED_MODULE_1__config_json___default.a.river.width / 2,
+        workfieldWidth: 892,
         workfieldLeftEdge: (__WEBPACK_IMPORTED_MODULE_1__config_json___default.a.river.width - 892) / 2,
-        wrapperTopOffset: null
       }
     }
   },
   mounted() {
-    this.setVisibilityEventNameAndHiddenProperty();
+    // this.setVisibilityEventNameAndHiddenProperty();
     this.handleEvents();
-    this.cacheData();
+    this.renderAnimations();
     window.Anime = __WEBPACK_IMPORTED_MODULE_2_animejs___default.a;
   },
   methods: {
@@ -25455,12 +25448,6 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
     randomize(max) {
       // window.randomize = this.randomize;
       return Math.round((Math.random() * max * 1e2) % max);
-    },
-    
-    cacheData() {
-      this.elements.$river.back = $(`#${this.id.river.back}`);
-      this.elements.$river.front = $(`#${this.id.river.front}`);
-      this.cache.wrapperTopOffset = this.$wrapper().position().top;
     },
     
     setVisibilityEventNameAndHiddenProperty() {
@@ -25605,51 +25592,42 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
     },
     
     /** Animation renders **************************************************/
+
+    renderAnimations() {
+      this.animateRiver();
+      this.animateRiverElements();
+    },
     
     /** River animation ****************************************************/
     
     animateRiver() {
-      this.animateRiverBack();
-      this.animateRiverFront();
+      if (!this.anime.river.back)
+        this.anime.river.back = this.animateRiverBack();
+      
+      if (!this.anime.river.front)
+        this.anime.river.front = this.animateRiverFront();
     },
-    
+
     animateRiverBack() {
-      // this.elements.$river.back
-      //   .css({ backgroundPositionX: 0 })
-      //   .animate(
-      //     { backgroundPositionX: 1645 },
-      //     this.config.elements.T,
-      //     "linear",
-      //     this.animateRiverBack
-      //   );
       return __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
         loop: true,
         targets: document.querySelector(`#${this.id.river.back}`),
-        autoplay: true,
-        
+        autoplay: false,
+    
         backgroundPositionX: [
-          { value: 1645, easing: "linear", duration: this.config.elements.T }
+          { value: 100, easing: "linear", duration: this.config.elements.T }
         ]
       })
     },
 
     animateRiverFront() {
-      // TODO: Remove constants
-      // this.elements.$river.front
-      //   .css({ backgroundPositionX: 0 })
-      //   .animate(
-      //     { backgroundPositionX: 1645 },
-      //     this.config.elements.T * 0.8,
-      //     "linear",
-      //     this.animateRiverFront
-      //   );
       return __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
         loop: true,
         targets: document.querySelector(`#${this.id.river.front}`),
-        autoplay: true,
-  
+        autoplay: false,
+    
         backgroundPositionX: [
-          { value: 1645, easing: "linear", duration: this.config.elements.T * 0.8 }
+          { value: 100, easing: "linear", duration: this.config.elements.T * 0.8 }
         ]
       })
     },
@@ -25666,48 +25644,11 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
 
     /** River elements animation *******************************************/
     
-    // animateElementFromStart($el) {
-    //   let vm = this;
-    //   let duration = this.getElementDurationFromStart($el);
-    //
-    //   $el
-    //     .css({ left: 0 })
-    //     .animate(
-    //       { left: this.getElementOffset($el) },
-    //       {
-    //         queue: false,
-    //         easing: "linear",
-    //         duration: duration,
-    //         complete: function() {
-    //           vm.animateElementToEnd($(this));
-    //         }
-    //       },
-    //     );
-    // },
-    //
-    // animateElementToEnd($el) {
-    //   let vm = this;
-    //   let duration = this.getElementDurationToEnd($el);
-    //
-    //   $el
-    //     .animate(
-    //     { left: this.config.river.width },
-    //     {
-    //       queue: false,
-    //       easing: "linear",
-    //       duration: duration,
-    //       complete: function() {
-    //         vm.animateElementFromStart($(this));
-    //       }
-    //     },
-    //   )
-    // },
-    
     animateRiverElement($el) {
       return __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
         loop: true,
         targets: this.raw($el),
-        autoplay: true,
+        autoplay: false,
         
         left: [
           // Move forward,from the place, where has been placed
@@ -25756,15 +25697,29 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
           });
         }
         
-        // this.animateElementToEnd($wrap);
         this.anime.wraps.push(this.animateRiverElement($wrap));
       }
     },
     
+    pauseRiverElementAnimation(elementIndex) {
+      this.anime.wraps[elementIndex].pause();
+      // this.anime.elements[elementIndex].pause();
+    },
+    
+    pauseRiverElementsAnimation() {
+      this.anime.wraps.forEach( wrap => wrap.pause() );
+      // this.anime.elements.forEach( element => element.pause() );
+    },
+    
+    playRiverElementsAnimation() {
+      this.anime.wraps.forEach( wrap => wrap.play() );
+      // this.anime.elements.forEach( element => element.play() );
+    },
+    
     /** Catch and wash away animation **************************************/
     
-    distanceFromCenter(el, middlePoint) {
-      return Math.abs($(el).parent().position().left - middlePoint);
+    distanceFromCenter(el) {
+      return Math.abs($(el).parent().position().left - this.cache.middlePoint);
     },
     
     getElementIndex($el) {
@@ -25778,6 +25733,7 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
       $(this.$question()).append($el.removeAttr('style'))
     },
     
+    // TODO: Remove constants
     animateQuestionFall() {
       let height = this.$question().height();
       let leftOffset = this.config.elements.catch.place.left + this.cache.workfieldLeftEdge;
@@ -25787,11 +25743,39 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
         targets: this.raw(this.$question()),
         autoplay: true,
         
+        rotate: [
+          {
+            value: 30,
+            duration: this.config.fallDuration / 2,
+            easing: 'easeInQuad'
+          },
+          {
+            value: -10,
+            duration: (this.config.fallDuration / 2) + (this.config.swimDuration / 4),
+            easing: 'easeInOutQuad'
+          },
+          {
+            value: 0,
+            duration: this.config.swimDuration / 4,
+            easing: 'easeInOutQuad'
+          }
+        ],
+        
         top: [
           {
-            value: this.config.elements.catch.place.top - height,
+            value: this.config.elements.catch.place.top,
             duration: this.config.fallDuration,
-            easing: 'easeOutExpo'
+            easing: 'easeInOutQuad'
+          },
+          {
+            value: `-=20`,
+            duration: this.config.swimDuration / 2,
+            easing: 'easeInOutQuad'
+          },
+          {
+            value: `+=20`,
+            duration: this.config.swimDuration / 4,
+            easing: 'easeInOutQuad'
           }
         ],
         
@@ -25800,15 +25784,27 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
             value: leftOffset,
             duration: this.config.fallDuration,
             easing: "linear"
+          },
+          {
+            value: `+=${2000}`,
+            duration: this.config.swimDuration,
+            easing: "easeInQuad"
           }
-        ]
+        ],
+        
+        complete: () => {
+          this.animating = false;
+          this.answer.step++;
+          this.$question().remove();
+          this.placeQuestion();
+          this.highlight.correct = false;
+        }
       });
     },
     
+    // TODO: Remove constants
     animateHelper($el, position) {
-      let elementIndex = this.getElementIndex($el);
-      
-      this.anime.wraps[elementIndex].pause();
+      this.pauseRiverElementAnimation(this.getElementIndex($el));
       
       __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
         loop: false,
@@ -25818,65 +25814,41 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
         left: [
           {
             value: position.x,
-            duration: 700,
-            easing: "linear"
+            duration: this.config.fallDuration,
+            easing: "easeOutCirc"
+          },
+          {
+            value: `+=${2000}`,
+            duration: this.config.swimDuration,
+            easing: "easeInQuad"
           }
         ],
         
         top: [
           {
             value: position.y,
-            duration: 700,
-            easing: "easeInOutQuad"
+            duration: this.config.fallDuration,
+            easing: "easeOutCirc"
           }
         ]
       });
-      // $el
-      //   .stop()
-      //   .animate(
-      //     {
-      //       top: position.y
-      //     },
-      //     {
-      //       duraton: this.config.fallDuration,
-      //       easing: "swing",
-      //       queue: 'catch-animation'
-      //     }
-      //   )
-      //   .dequeue('catch-animation')
-      //   .animate(
-      //     { left: position.x },
-      //     {
-      //       duraton: this.config.fallDuration,
-      //       easing: "linear",
-      //       queue: 'catch-animation'
-      //     }
-      //   )
-      //   .dequeue('catch-animation');
     },
     
+    // TODO: Remove 'visibleZoneWidth' constant (https://github.com/vigetlabs/sass-json-vars)
+    // TODO: Cache offset values to remove calculating after each successful answer
+    // TODO: Remove 'zIndex' constants
+    // TODO: Refactor this function
     animateQuestionHelpers(typeIndex) {
-      // TODO: Remove 'visibleZoneWidth' constant (https://github.com/vigetlabs/sass-json-vars)
-      // TODO: Cache offset values to remove calculating after each successful answer
-      // TODO: Remove 'zIndex' constants
-      // TODO: Refactor this function
-      let visibleZoneWidth = 892;
-      let riverCenterOffset = this.config.river.width / 2;
-      // let visibleZoneStartOffset = riverCenterOffset - visibleZoneWidth / 2;
-      // let visibleZoneEndOffset = riverCenterOffset + visibleZoneWidth / 2;
-      
       let $left, $right;
       
       this.$elementsByType(typeIndex).each((i, el) => {
-        if (this.distanceFromCenter(el, riverCenterOffset) < visibleZoneWidth) {
+        if (this.distanceFromCenter(el) < this.cache.workfieldWidth / 2) {
           if (!$left) {
             $left = $(el).parent().css({zIndex: 60});
-            // leftIndex = this.getElementIndex($left);
             return true
           }
           if (!$right) {
             $right = $(el).parent().css({zIndex: 60});
-            // rightIndex = this.getElementIndex($right);
             return false
           }
         }
@@ -25903,145 +25875,20 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
       this.animateQuestionFall();
       this.animateHelper($left, leftPosition);
       this.animateHelper($right, rightPosition);
-      
-      
     },
-    // animeTimelineCatchAndWashAway($first, $second) {
-    //   return {
-    //     loop: false,
-    //     direction: "normal",
-    //     autoplay: true,
-    //     complete: () => {
-    //       if ($first && $second) {
-    //         this.catchElement($first);
-    //         this.catchElement($second);
-    //       }
-    //       anime(this.animeObjWashAway());
-    //     }
-    //   }
-    // },
-    //
-    // // TODO: Remove constants!!!
-    // animeObjWashAway() {
-    //   return {
-    //     loop: false,
-    //     targets: this.$question(),
-    //     autoplay: true,
-    //     direction: "normal",
-    //     opacity: [
-    //       { value: 1, duration: 1600 },
-    //       { value: 0, duration: 400, easing: "easeInSine" }
-    //     ],
-    //
-    //     left: [
-    //       //{value: leftOffset, duration: 700, easing: "easeOutSine" },
-    //       {value: '+=1000px', duration: 2000, easing: "easeInCubic"}
-    //     ],
-    //
-    //     top: [
-    //       //{value: topOffset, duration: 700, easing: "easeInSine" },
-    //       {value: '+=30px', duration: 2000, easing: 'easeInCubic'}
-    //     ],
-    //
-    //     rotate: [
-    //       //{value: '10deg', duration: 300, delay: 100, easing: "linear"},
-    //       //{value: '0deg', duration: 400, easing: "linear"},
-    //       {value: '4deg', duration: 500, delay: 200, easing: "linear"},
-    //       {value: '-2deg', duration: 800, easing: "linear"},
-    //       {value: '1deg', duration: 800, easing: "linear"},
-    //     ],
-    //
-    //     complete: () => {
-    //       this.animating = false;
-    //       $(this.$question()).remove();
-    //       this.answer.step++;
-    //       this.$renderQuestion();
-    //       this.highlight.correct = false;
-    //     }
-    //   }
-    // },
-    //
-    // animeObjCatchElement($el, offsetX, offsetY) {
-    //   return {
-    //     top: [{value: offsetY, easing: "easeOutSine"}],
-    //     left: [{value: offsetX, easing: "easeInSine"}],
-    //     offset: 0,
-    //     targets: $el[0],
-    //     duration: 700,
-    //   }
-    // },
     
     /**
      * Animation control
      */
     
-    stopAllAnimations() {
+    pauseAllAnimations() {
       this.pauseRiverAnimation();
-      this.stopElementsAnimation();
+      this.pauseRiverElementsAnimation();
     },
 
     playAllAnimations() {
-      // this.animateRiver();
       this.playRiverAnimation();
-      this.animateRiverElements();
-    },
-    
-    // TODO: refactor this function
-    catchQuestionAndWashItAway(labelIndex) {
-      anime(this.animeObjDropQuestion(300, 200));
-      // anime
-      //   .timeline(this.animeTimelineCatchAndWashAway())
-      //   .add(this.animeObjDropQuestion(1700, 300));
-      // this.animating = true;
-      //
-      // let _this = this;
-      // let middlePoint = this.config.river.width / 2;
-      // // TODO: remove constant (width of cropped workfield)...
-      // let allowedRange = 892 / 2;
-      // let $first, $second, firstIndex, secondIndex;
-      // let leftOffset = this.config.river.width / 2
-      //   - allowedRange
-      //   + this.config.elements.catch.place.left;
-      // let topOffset = this.config.elements.catch.place.top;
-      //
-      // if (labelIndex) {
-      //   let $elements = this.currentAnswerElements(labelIndex);
-      //   $elements.each((i, el) => {
-      //     if (this.distanceFromMiddle(el, middlePoint) < allowedRange) {
-      //       if (!$first) {
-      //         $first = $(el).parent().css({zIndex: 60});
-      //         firstIndex = this.getElementIndex($first);
-      //         return true
-      //       }
-      //       if (!$second) {
-      //         $second = $(el).parent().css({zIndex: 60});
-      //         secondIndex = this.getElementIndex($second);
-      //         return false
-      //       }
-      //     }
-      //   });
-      //
-      //   // Catch question
-      //   let $question = $(this.$question());
-      //   let secondOffsetX = $question.width() + leftOffset - this.config.elements.catch.offset;
-      //   let secondOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
-      //   let firstOffsetX = leftOffset - this.config.elements.catch.offset;
-      //   let firstOffsetY = $question.height() + topOffset - this.config.elements.catch.offset;
-      //
-      //   this.pauseElementAnimation(firstIndex);
-      //   this.pauseElementAnimation(secondIndex);
-      //
-      //   anime
-      //     .timeline(this.animeTimelineCatchAndWashAway($first, $second))
-      //     // .add(this.animeObjCatchElement($first, firstOffsetX, firstOffsetY))
-      //     // .add(this.animeObjCatchElement($second, secondOffsetX, secondOffsetY))
-      //     .add(this.animeObjDropQuestion(leftOffset, topOffset));
-      // } else {
-      //   anime
-      //     .timeline(this.animeTimelineCatchAndWashAway())
-      //     .add(this.animeObjDropQuestion(leftOffset, topOffset));
-      // }
-      
+      this.playRiverElementsAnimation();
     },
 
     /**
@@ -26076,7 +25923,7 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
           this.playAllAnimations();
           break;
         default:
-          this.stopAllAnimations();
+          this.pauseAllAnimations();
           break;
       }
     },
@@ -26109,7 +25956,7 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
     onVisibilityChange() {
       if (document[this.hidden]) {
         console.log('stop');
-        this.stopAllAnimations();
+        this.pauseAllAnimations();
       } else {
         console.log('play');
         this.playAllAnimations();
@@ -27453,7 +27300,7 @@ module.exports = __webpack_require__.p + "img/wave-front-hover.svg";
 /* 94 */
 /***/ (function(module, exports) {
 
-module.exports = {"fallDuration":700,"elements":{"zIndex":30,"T":25000,"oscillationOffset":20,"count":35,"offsetRatio":0.7,"space":{"upper":50,"lower":30},"offset":{"upper":90,"lower":0},"catch":{"place":{"top":340,"left":250},"offset":30},"riverBackTimeRatio":0.8},"highlightWrongTimeout":2000,"river":{"width":3000}}
+module.exports = {"fallDuration":800,"swimDuration":2000,"elements":{"zIndex":30,"T":25000,"oscillationOffset":20,"count":35,"offsetRatio":0.7,"space":{"upper":50,"lower":30},"offset":{"upper":90,"lower":0},"catch":{"place":{"top":340,"left":250},"offset":30},"riverBackTimeRatio":0.8},"highlightWrongTimeout":2000,"river":{"width":3000}}
 
 /***/ }),
 /* 95 */
