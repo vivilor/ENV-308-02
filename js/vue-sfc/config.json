@@ -1,4 +1,5 @@
 {
+  "fallDuration": 700,
   "elements": {
     "zIndex": 30,
     "T": 25000,
@@ -6,8 +7,8 @@
     "count": 35,
     "offsetRatio": 0.7,
     "space": {
-      "upper": 40,
-      "lower": 50
+      "upper": 50,
+      "lower": 30
     },
     "offset": {
       "upper": 90,
