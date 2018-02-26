@@ -30,34 +30,27 @@
       )
         div(:class="classes.elements[(j-1) % 8]")
       
-      transition(
-        name="finished",
-        @after-enter="afterFinishedEnter"
-      )
-        #final-P(v-show="finished")
-          div(v-text="")
-          div(v-text="")
-  
-      transition(name="finished")
-        #final-L(v-show="finished")
-          div(v-text="")
-          div(v-text="")
-          .l1
-  
-      transition(name="finished")
-        #final-E(v-show="finished")
-          div(v-text="")
-          div(v-text="")
-          .e1
-          .e2
-  
-      transition(name="finished")
-        #final-T(v-show="finished")
-          div(v-text="")
-          div(v-text="")
-          .t1
-          .t2
-  
+      
+      #final-P(v-show="finished")
+        div(v-html="content.labels[0]")
+        div(v-html="content.finish[3]")
+
+      #final-T(v-show="finished")
+        div(v-html="content.labels[1]")
+        div(v-html="content.finish[0]")
+        .tr1
+        .tr2
+        
+      #final-L(v-show="finished")
+        div(v-html="content.labels[2]")
+        div(v-html="content.finish[1]")
+        .l1
+
+      #final-E(v-show="finished")
+        div(v-html="content.labels[3]")
+        div(v-html="content.finish[2]")
+        .e3
+        .e2
 </template>
 
 <script>
@@ -708,6 +701,51 @@
         return this.content.correct.indexOf(this.sequence[this.answer.step]);
       },
   
+      // TODO (Costyl): Rename and change this function
+      releaseFinishLabels() {
+        this.finished = true;
+        Anime({
+          targets: document.querySelectorAll('div[id^=final]'),
+          loop: false,
+          autoplay: true,
+          
+          left: [
+            {
+              value: `+=800`,
+              duration: 0
+            },
+            {
+              value: `-=800`,
+              easing: "easeOutSine",
+              duration: 1600,
+            }
+          ],
+          
+          complete: () => {
+            this.reverseRiverAnimation();
+            Anime({
+              targets: document.querySelectorAll('div[id^=final]'),
+              loop: true,
+              autoplay: true,
+              direction: "alternate",
+              
+              translateY: [
+                { value: `+=20`, duration: 1500, easing: "easeInOutSine" },
+                { value: `-=10`, duration: 1000, easing: "easeInOutSine" },
+                { value: `-=20`, duration: 1200, easing: "easeInOutSine" },
+                { value: `+=20`, duration: 1300, easing: "easeInOutSine" }
+              ],
+              
+              rotate: [
+                { value: 5, duration: 1100, easing: "easeInOutSine" },
+                { value: -5, duration: 2100, easing: "easeInOutSine" },
+                { value: 0, duration: 1800, easing: "easeInOutSine" }
+              ]
+            })
+          }
+        });
+      },
+      
       /** Event handlers *****************************************************/
       
       handleEvents() {
@@ -727,7 +765,7 @@
             this.reverseRiverAnimation();
             this.animateRiverElementsHide();
             this.answer.show = false;
-            this.finished = true;
+            this.releaseFinishLabels();
             break;
           default:
             this.finished = false;
@@ -781,7 +819,6 @@
       },
       
       afterFinishedEnter() {
-        console.log('Finished enter');
         this.reverseRiverAnimation();
       }
     },
@@ -855,21 +892,24 @@
     z-index: 30;
   }
   
-  #question,
-  #final-P:nth-child(2),
-  #final-L:nth-child(2),
-  #final-E:nth-child(2),
-  #final-T:nth-child(2) {
+  #question {
     top: 38px;
     left: ($river-width - $workfield-cropped) / 2;
+    position: absolute;
+    line-height: 34px;
+  }
+  
+  #question,
+  #final-P > div:nth-child(2),
+  #final-L > div:nth-child(2),
+  #final-E > div:nth-child(2),
+  #final-T > div:nth-child(2) {
     color: black;
     border: 1px solid #f0f0f0;
     display: inline-block;
     padding: 0 16px;
     z-index: 50;
-    position: absolute;
     font-size: 23px;
-    line-height: 34px;
     font-family: "ConquerorSans", sans-serif;
     background-color: white;
   }
@@ -890,17 +930,82 @@
   .wrapper-leave-active   { transition: .4s ease-in }
   .wrapper-leave          { opacity: 0 }
   
-  .finished-enter-to       { }
-  .finished-enter-active   { transition: .8s ease-out }
-  .finished-enter          { transform: translateX(800) }
-  .finished-leave-to       { opacity: 1 }
-  .finished-leave-active   { transition: .4s ease-in }
-  .finished-leave          { opacity: 0 }
+  @import "~themes/custom.scss";
   
-  #final-P {}
-  #final-E {}
-  #final-L {}
-  #final-T {}
+  @mixin workfieldOffset($x) {
+    left: $river-width / 2 - $workfield-cropped / 2 + $x
+  }
+
+  #final-P,
+  #final-L,
+  #final-E,
+  #final-T {
+    position: absolute;
+    z-index: 100;
+    
+    & > div:first-child {
+      color: black;
+      padding: 0 16px;
+      z-index: 50;
+      font-size: 23px;
+      line-height: 34px;
+      font-family: "ConquerorSansBold", sans-serif;
+    }
+    
+    & > div:nth-child(3),
+    & > div:nth-child(4) {
+      position: absolute;
+    }
+  }
+  
+  #final-P {
+    @include workfieldOffset(450px);
+    transform: rotate(-1deg);
+    z-index: 4;
+    top: 130px;
+  }
+  
+  #final-E {
+    @include workfieldOffset(10px);
+    transform: rotate(6deg);
+    top: 290px;
+    
+    & > .e3 {
+      left: 96px;
+      transform: rotate(19deg);
+    }
+  }
+  
+  #final-L {
+    @include workfieldOffset(370px);
+    transform: rotate(-8deg);
+    top: 360px;
+    
+    & > div:first-child {
+    }
+    
+    & > .l1 {
+      z-index: -1;
+      top: -32px;
+      left: -40px;
+    }
+  }
+  
+  #final-T {
+    @include workfieldOffset(630px);
+    transform: rotate(10deg);
+    top: 305px;
+    
+    & > .tr1 {
+      top: 18px;
+      left: -40px;
+    }
+  
+    & > .tr2 {
+      right: -26px;
+      bottom: -16px;
+    }
+  }
 </style>
 
 <style lang="scss" scoped>

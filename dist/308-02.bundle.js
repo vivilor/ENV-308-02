@@ -11951,7 +11951,7 @@ return $.widget( "ui.mouse", {
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = {"header":"","steps":{"count":2,"headers":[{"header":"Работа крови"},{"header":"Какая часть крови выполняет эту работу?"},{"header":"Всё правильно!"}],"data":[{"labels":["переваривать пищу","переносить по организму вещества","служить пробкой в ранах","защищать от разбойников","защищать организм от болезней","передавать органам сигналы мозгa"],"traps":{"count":3,"correct":[1,2,4]},"pair":["переносит по организму<br>кислород и углекислый газ","переносит по организму<br>питательные и вредные вещества"],"paired":1},{"items":["служить пробкой в ранах","защищать организм от болезней","переносит по организму<br>кислород и углекислый газ","переносит по организму<br>питательные и вредные вещества"],"labels":["плазма","тромбоциты","лейкоциты","эритроциты"],"correct":[3,0,1,2]}]},"buttons":{"validateStep":{"html":"Проверить","name":"validate-step"},"continueTask":{"html":"Продолжить","name":"continue-task"}}}
+module.exports = {"header":"","steps":{"count":2,"headers":[{"header":"Работа крови"},{"header":"Какая часть крови выполняет эту работу?"},{"header":"Всё правильно!"}],"data":[{"labels":["переваривать пищу","переносить по организму вещества","служить пробкой в ранах","защищать от разбойников","защищать организм от болезней","передавать органам сигналы мозгa"],"traps":{"count":3,"correct":[1,2,4]},"pair":["переносит по организму<br>кислород и углекислый газ","переносит по организму<br>питательные и вредные вещества"],"paired":1},{"items":["служить пробкой в ранах","защищать организм от болезней","переносит по организму<br>кислород и углекислый газ","переносит по организму<br>питательные и вредные вещества"],"finish":["служат пробкой<br>в ранах","защищают организм<br>от болезней","переносят по организму<br>кислород и углекислый газ","переносит по организму<br>питательные и вредные вещества"],"labels":["плазма","тромбоциты","лейкоциты","эритроциты"],"correct":[3,0,1,2]}]},"buttons":{"validateStep":{"html":"Проверить","name":"validate-step"},"continueTask":{"html":"Продолжить","name":"continue-task"}}}
 
 /***/ }),
 /* 12 */
@@ -25128,8 +25128,13 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-ExtraBold/Conquero
     handleEvents() {
       this.eventBus.$on(__WEBPACK_IMPORTED_MODULE_1__events__["a" /* default */].validation.finish, this.onValidateFinish);
       this.eventBus.$on(__WEBPACK_IMPORTED_MODULE_1__events__["a" /* default */].buttons.click, this.onButtonClick);
+      this.eventBus.$on(__WEBPACK_IMPORTED_MODULE_1__events__["a" /* default */].step.change, this.onStepChange);
     },
 
+    onStepChange(stepNumber) {
+      this.currentStep = stepNumber;
+    },
+    
     onButtonClick(buttonName) {
       switch (buttonName) {
         case __WEBPACK_IMPORTED_MODULE_7_locale_ru_ru_json___default.a.buttons.validateStep.name:
@@ -25142,8 +25147,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-ExtraBold/Conquero
     },
     
     requestTaskContinue() {
-      this.currentStep++;
-      this.eventBus.$emit(__WEBPACK_IMPORTED_MODULE_1__events__["a" /* default */].step.change, this.currentStep);
+      this.eventBus.$emit(__WEBPACK_IMPORTED_MODULE_1__events__["a" /* default */].step.change, this.currentStep + 1);
     },
     
     onRestartButtonClick() {
@@ -25300,6 +25304,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-ExtraBold/Conquero
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   name: "app-steps-header",
@@ -25331,13 +25336,6 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__config_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_animejs__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_animejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_animejs__);
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -26041,6 +26039,51 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
       return this.content.correct.indexOf(this.sequence[this.answer.step]);
     },
 
+    // TODO (Costyl): Rename and change this function
+    releaseFinishLabels() {
+      this.finished = true;
+      __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
+        targets: document.querySelectorAll('div[id^=final]'),
+        loop: false,
+        autoplay: true,
+        
+        left: [
+          {
+            value: `+=800`,
+            duration: 0
+          },
+          {
+            value: `-=800`,
+            easing: "easeOutSine",
+            duration: 1600,
+          }
+        ],
+        
+        complete: () => {
+          this.reverseRiverAnimation();
+          __WEBPACK_IMPORTED_MODULE_2_animejs___default()({
+            targets: document.querySelectorAll('div[id^=final]'),
+            loop: true,
+            autoplay: true,
+            direction: "alternate",
+            
+            translateY: [
+              { value: `+=20`, duration: 1500, easing: "easeInOutSine" },
+              { value: `-=10`, duration: 1000, easing: "easeInOutSine" },
+              { value: `-=20`, duration: 1200, easing: "easeInOutSine" },
+              { value: `+=20`, duration: 1300, easing: "easeInOutSine" }
+            ],
+            
+            rotate: [
+              { value: 5, duration: 1100, easing: "easeInOutSine" },
+              { value: -5, duration: 2100, easing: "easeInOutSine" },
+              { value: 0, duration: 1800, easing: "easeInOutSine" }
+            ]
+          })
+        }
+      });
+    },
+    
     /** Event handlers *****************************************************/
     
     handleEvents() {
@@ -26060,7 +26103,7 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
           this.reverseRiverAnimation();
           this.animateRiverElementsHide();
           this.answer.show = false;
-          this.finished = true;
+          this.releaseFinishLabels();
           break;
         default:
           this.finished = false;
@@ -26114,7 +26157,6 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
     },
     
     afterFinishedEnter() {
-      console.log('Finished enter');
       this.reverseRiverAnimation();
     }
   },
@@ -27092,7 +27134,7 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(68)
+  __webpack_require__(108)
 }
 var normalizeComponent = __webpack_require__(5)
 /* script */
@@ -27138,46 +27180,8 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(69);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("31d62f17", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\nh2#app-step-header[data-v-2f370087] {\n  margin: 0;\n  height: 56px;\n  font-size: 23px;\n  font-family: ConquerorSans, sans-serif;\n  line-height: 28px;\n  font-weight: normal;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 68 */,
+/* 69 */,
 /* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -27188,6 +27192,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _vm.currentStep > 0
     ? _c("h2", {
+        class: { final: _vm.content.length === _vm.currentStep },
         attrs: { id: "app-step-header" },
         domProps: { innerHTML: _vm._s(_vm.content[_vm.currentStep - 1].header) }
       })
@@ -27298,7 +27303,7 @@ exports = module.exports = __webpack_require__(1)(false);
 exports.i(__webpack_require__(8), "");
 
 // module
-exports.push([module.i, "\n.tr1 {\n  background-image: url(" + escape(__webpack_require__(74)) + ");\n  width: 64px;\n  height: 50px;\n}\n.tr1.hover {\n    background-image: url(" + escape(__webpack_require__(75)) + ");\n}\n.tr2 {\n  background-image: url(" + escape(__webpack_require__(76)) + ");\n  width: 44px;\n  height: 50px;\n}\n.tr2.hover {\n    background-image: url(" + escape(__webpack_require__(77)) + ");\n}\n.e1 {\n  background-image: url(" + escape(__webpack_require__(78)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e1.hover {\n    background-image: url(" + escape(__webpack_require__(79)) + ");\n}\n.e2 {\n  background-image: url(" + escape(__webpack_require__(80)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e2.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.e3 {\n  background-image: url(" + escape(__webpack_require__(81)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e3.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.l1 {\n  background-image: url(" + escape(__webpack_require__(82)) + ");\n  width: 81px;\n  height: 82px;\n}\n.l1.hover {\n    background-image: url(" + escape(__webpack_require__(83)) + ");\n}\n.l2 {\n  background-image: url(" + escape(__webpack_require__(84)) + ");\n  width: 82px;\n  height: 81px;\n}\n.l2.hover {\n    background-image: url(" + escape(__webpack_require__(85)) + ");\n}\n.l3 {\n  background-image: url(" + escape(__webpack_require__(86)) + ");\n  width: 77px;\n  height: 76px;\n}\n.l3.hover {\n    background-image: url(" + escape(__webpack_require__(87)) + ");\n}\ndiv.wrap {\n  position: absolute;\n  z-index: 30;\n}\n#question,\n#final-P:nth-child(2),\n#final-L:nth-child(2),\n#final-E:nth-child(2),\n#final-T:nth-child(2) {\n  top: 38px;\n  left: 1054px;\n  color: black;\n  border: 1px solid #f0f0f0;\n  display: inline-block;\n  padding: 0 16px;\n  z-index: 50;\n  position: absolute;\n  font-size: 23px;\n  line-height: 34px;\n  font-family: \"ConquerorSans\", sans-serif;\n  background-color: white;\n}\n", ""]);
+exports.push([module.i, "\n.tr1 {\n  background-image: url(" + escape(__webpack_require__(74)) + ");\n  width: 64px;\n  height: 50px;\n}\n.tr1.hover {\n    background-image: url(" + escape(__webpack_require__(75)) + ");\n}\n.tr2 {\n  background-image: url(" + escape(__webpack_require__(76)) + ");\n  width: 44px;\n  height: 50px;\n}\n.tr2.hover {\n    background-image: url(" + escape(__webpack_require__(77)) + ");\n}\n.e1 {\n  background-image: url(" + escape(__webpack_require__(78)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e1.hover {\n    background-image: url(" + escape(__webpack_require__(79)) + ");\n}\n.e2 {\n  background-image: url(" + escape(__webpack_require__(80)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e2.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.e3 {\n  background-image: url(" + escape(__webpack_require__(81)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e3.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.l1 {\n  background-image: url(" + escape(__webpack_require__(82)) + ");\n  width: 81px;\n  height: 82px;\n}\n.l1.hover {\n    background-image: url(" + escape(__webpack_require__(83)) + ");\n}\n.l2 {\n  background-image: url(" + escape(__webpack_require__(84)) + ");\n  width: 82px;\n  height: 81px;\n}\n.l2.hover {\n    background-image: url(" + escape(__webpack_require__(85)) + ");\n}\n.l3 {\n  background-image: url(" + escape(__webpack_require__(86)) + ");\n  width: 77px;\n  height: 76px;\n}\n.l3.hover {\n    background-image: url(" + escape(__webpack_require__(87)) + ");\n}\ndiv.wrap {\n  position: absolute;\n  z-index: 30;\n}\n#question {\n  top: 38px;\n  left: 1054px;\n  position: absolute;\n  line-height: 34px;\n}\n#question,\n#final-P > div:nth-child(2),\n#final-L > div:nth-child(2),\n#final-E > div:nth-child(2),\n#final-T > div:nth-child(2) {\n  color: black;\n  border: 1px solid #f0f0f0;\n  display: inline-block;\n  padding: 0 16px;\n  z-index: 50;\n  font-size: 23px;\n  font-family: \"ConquerorSans\", sans-serif;\n  background-color: white;\n}\n", ""]);
 
 // exports
 
@@ -27511,90 +27516,98 @@ var render = function() {
             )
           }),
           _c(
-            "transition",
+            "div",
             {
-              attrs: { name: "finished" },
-              on: { "after-enter": _vm.afterFinishedEnter }
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.finished,
+                  expression: "finished"
+                }
+              ],
+              attrs: { id: "final-P" }
             },
             [
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.finished,
-                      expression: "finished"
-                    }
-                  ],
-                  attrs: { id: "final-P" }
-                },
-                [_c("div", {}), _c("div", {})]
-              )
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.labels[0]) }
+              }),
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.finish[3]) }
+              })
             ]
           ),
-          _c("transition", { attrs: { name: "finished" } }, [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.finished,
-                    expression: "finished"
-                  }
-                ],
-                attrs: { id: "final-L" }
-              },
-              [_c("div", {}), _c("div", {}), _c("div", { staticClass: "l1" })]
-            )
-          ]),
-          _c("transition", { attrs: { name: "finished" } }, [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.finished,
-                    expression: "finished"
-                  }
-                ],
-                attrs: { id: "final-E" }
-              },
-              [
-                _c("div", {}),
-                _c("div", {}),
-                _c("div", { staticClass: "e1" }),
-                _c("div", { staticClass: "e2" })
-              ]
-            )
-          ]),
-          _c("transition", { attrs: { name: "finished" } }, [
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.finished,
-                    expression: "finished"
-                  }
-                ],
-                attrs: { id: "final-T" }
-              },
-              [
-                _c("div", {}),
-                _c("div", {}),
-                _c("div", { staticClass: "t1" }),
-                _c("div", { staticClass: "t2" })
-              ]
-            )
-          ])
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.finished,
+                  expression: "finished"
+                }
+              ],
+              attrs: { id: "final-T" }
+            },
+            [
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.labels[1]) }
+              }),
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.finish[0]) }
+              }),
+              _c("div", { staticClass: "tr1" }),
+              _c("div", { staticClass: "tr2" })
+            ]
+          ),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.finished,
+                  expression: "finished"
+                }
+              ],
+              attrs: { id: "final-L" }
+            },
+            [
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.labels[2]) }
+              }),
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.finish[1]) }
+              }),
+              _c("div", { staticClass: "l1" })
+            ]
+          ),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.finished,
+                  expression: "finished"
+                }
+              ],
+              attrs: { id: "final-E" }
+            },
+            [
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.labels[3]) }
+              }),
+              _c("div", {
+                domProps: { innerHTML: _vm._s(_vm.content.finish[2]) }
+              }),
+              _c("div", { staticClass: "e3" }),
+              _c("div", { staticClass: "e2" })
+            ]
+          )
         ],
         2
       )
@@ -28452,7 +28465,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.answers-enter-active {\n  transition: .8s ease-out;\n}\n.answers-enter {\n  transform: translateY(400px);\n}\n.answers-leave-to {\n  opacity: 1;\n}\n.answers-leave-active {\n  transition: .3s ease-in;\n}\n.answers-leave {\n  opacity: 0;\n}\n.wrapper-enter-active {\n  transition: .8s ease-out;\n}\n.wrapper-enter {\n  transform: translateY(300px);\n}\n.wrapper-leave-to {\n  opacity: 1;\n}\n.wrapper-leave-active {\n  transition: .4s ease-in;\n}\n.wrapper-leave {\n  opacity: 0;\n}\n.finished-enter-active {\n  transition: .8s ease-out;\n}\n.finished-enter {\n  transform: translateX(800);\n}\n.finished-leave-to {\n  opacity: 1;\n}\n.finished-leave-active {\n  transition: .4s ease-in;\n}\n.finished-leave {\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n.answers-enter-active {\n  transition: .8s ease-out;\n}\n.answers-enter {\n  transform: translateY(400px);\n}\n.answers-leave-to {\n  opacity: 1;\n}\n.answers-leave-active {\n  transition: .3s ease-in;\n}\n.answers-leave {\n  opacity: 0;\n}\n.wrapper-enter-active {\n  transition: .8s ease-out;\n}\n.wrapper-enter {\n  transform: translateY(300px);\n}\n.wrapper-leave-to {\n  opacity: 1;\n}\n.wrapper-leave-active {\n  transition: .4s ease-in;\n}\n.wrapper-leave {\n  opacity: 0;\n}\n#final-P,\n#final-L,\n#final-E,\n#final-T {\n  position: absolute;\n  z-index: 100;\n}\n#final-P > div:first-child,\n  #final-L > div:first-child,\n  #final-E > div:first-child,\n  #final-T > div:first-child {\n    color: black;\n    padding: 0 16px;\n    z-index: 50;\n    font-size: 23px;\n    line-height: 34px;\n    font-family: \"ConquerorSansBold\", sans-serif;\n}\n#final-P > div:nth-child(3),\n  #final-P > div:nth-child(4),\n  #final-L > div:nth-child(3),\n  #final-L > div:nth-child(4),\n  #final-E > div:nth-child(3),\n  #final-E > div:nth-child(4),\n  #final-T > div:nth-child(3),\n  #final-T > div:nth-child(4) {\n    position: absolute;\n}\n#final-P {\n  left: 1504px;\n  transform: rotate(-1deg);\n  z-index: 4;\n  top: 130px;\n}\n#final-E {\n  left: 1064px;\n  transform: rotate(6deg);\n  top: 290px;\n}\n#final-E > .e3 {\n    left: 96px;\n    transform: rotate(19deg);\n}\n#final-L {\n  left: 1424px;\n  transform: rotate(-8deg);\n  top: 360px;\n}\n#final-L > .l1 {\n    z-index: -1;\n    top: -32px;\n    left: -40px;\n}\n#final-T {\n  left: 1684px;\n  transform: rotate(10deg);\n  top: 305px;\n}\n#final-T > .tr1 {\n    top: 18px;\n    left: -40px;\n}\n#final-T > .tr2 {\n    right: -26px;\n    bottom: -16px;\n}\n", ""]);
 
 // exports
 
@@ -28494,6 +28507,46 @@ exports = module.exports = __webpack_require__(1)(false);
 
 // module
 exports.push([module.i, "\n#river-static[data-v-2c11d6f8], #river-front[data-v-2c11d6f8], #river-back[data-v-2c11d6f8] {\n  position: absolute;\n  width: 100%;\n}\n#river-back[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(90)) + ");\n  height: 108px;\n  bottom: 150px;\n  z-index: 4;\n}\n#river-back.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(91)) + ");\n}\n#river-front[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(92)) + ");\n  height: 105px;\n  bottom: 150px;\n  z-index: 5;\n}\n#river-front.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(93)) + ");\n}\n#river-static[data-v-2c11d6f8] {\n  height: 450px;\n  bottom: -300px;\n  position: absolute;\n  background-color: #faecd7;\n  z-index: 5;\n}\n#river-static.hover[data-v-2c11d6f8] {\n    background-color: #fff4bf;\n}\ndiv.label-answer[data-v-2c11d6f8] {\n  color: #00a095;\n  cursor: pointer;\n  border: #86d1cc 1px solid;\n  font-size: 23px;\n  line-height: 35px;\n  border-radius: 3px;\n  text-align: center;\n  font-family: ConquerorSans, sans-serif;\n  border-bottom: #00a095 2px solid;\n}\ndiv.label-answer[data-v-2c11d6f8]:first-child {\n    width: 110px;\n}\ndiv.label-answer[data-v-2c11d6f8]:not(:first-child) {\n    width: 160px;\n}\ndiv.label-answer[data-v-2c11d6f8]:hover {\n    border-color: #daf1ef;\n    border-bottom-color: #ffe66c;\n}\ndiv.label-answer[data-v-2c11d6f8]:active {\n    border: 2px solid #00a095;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.wrong[data-v-2c11d6f8] {\n    border: 2px solid #f48154;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.correct[data-v-2c11d6f8] {\n    border: 2px solid #13ebdc;\n    margin: -1px -1px 0 -1px;\n}\ndiv#LabelChoose-wrapper[data-v-2c11d6f8] {\n  z-index: 10;\n  top: 68px;\n  left: -1054px;\n  right: 0;\n  width: 3000px;\n  bottom: 0;\n  position: absolute;\n}\ndiv#LabelChoose-wrapper > #answers[data-v-2c11d6f8] {\n    top: 128px;\n    left: 1054px;\n    width: 676px;\n    display: flex;\n    position: relative;\n    justify-content: space-between;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(109);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("357434d8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh2#app-step-header[data-v-2f370087] {\n  margin: 0;\n  height: 56px;\n  font-size: 23px;\n  font-family: ConquerorSans, sans-serif;\n  line-height: 28px;\n  font-weight: normal;\n}\nh2#app-step-header.final[data-v-2f370087] {\n    color: #24ddd0;\n    font-family: ConquerorSansBold, sans-serif;\n    font-weight: bold;\n}\n", ""]);
 
 // exports
 
