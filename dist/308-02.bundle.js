@@ -11736,7 +11736,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 		// AMD. Register as an anonymous module.
 		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 			__webpack_require__(0),
-			__webpack_require__(98),
+			__webpack_require__(100),
 			__webpack_require__(2),
 			__webpack_require__(6)
 		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
@@ -12083,9 +12083,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 			__webpack_require__(0),
 			__webpack_require__(10),
 			__webpack_require__(12),
-			__webpack_require__(99),
 			__webpack_require__(101),
-			__webpack_require__(100),
+			__webpack_require__(103),
+			__webpack_require__(102),
 			__webpack_require__(13),
 			__webpack_require__(2),
 			__webpack_require__(6)
@@ -24735,7 +24735,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
     
     trapLabel(ev, ui) {
       let $trap = $(ev.target);
-      let $label = ui.draggable;
+      let $label = ui.draggable.addClass(this.classes.trapped);
       let labelPos = ui.position;
       let trapIndex = this.getTrapIndex($trap);
       let labelIndex = this.getLabelIndex($label);
@@ -24751,12 +24751,14 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
     },
     
     returnLabel($label) {
-      $label.animate(
-        this.calcPathForReturnAnimation($label),
-        __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.animation.duration,
-        __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.animation.easing,
-        this.removeHighlight($label)
-      );
+      $label
+        .removeClass(this.classes.trapped)
+        .animate(
+          this.calcPathForReturnAnimation($label),
+          __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.animation.duration,
+          __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.animation.easing,
+          this.removeHighlight($label)
+        );
     },
     
     
@@ -24815,12 +24817,9 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
         revert: function(droppable) {
           let labelIndex = _this.getLabelIndex(this);
           if (!droppable) {
-            console.log('No droppable');
             if (_this.isNotTrappedLabel(labelIndex)) {
-              console.log('Not from trap');
               return true;
             } else {
-              console.log('From trap');
               _this.removeTrappedMarkFromLabel(labelIndex);
               _this.returnLabel(this);
               return false;
@@ -25332,7 +25331,7 @@ module.exports = __webpack_require__.p + "img/e2_3-hover.svg";
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__events__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_json__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_json__ = __webpack_require__(96);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__config_json__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_animejs__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_animejs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_animejs__);
@@ -26253,8 +26252,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 window.anime = __webpack_require__(29);
 window.$ = __webpack_require__(0);
-__webpack_require__(97);
-__webpack_require__(102);
+__webpack_require__(99);
+__webpack_require__(104);
 
 let app = new __WEBPACK_IMPORTED_MODULE_0_vue__["a" /* default */]({
   el: "#app",
@@ -26570,7 +26569,7 @@ exports.i(__webpack_require__(8), "");
 exports.i(__webpack_require__(19), "");
 
 // module
-exports.push([module.i, "\ndiv, h1, h2, span, button, ul, li {\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n@keyframes wrong-label {\n100% {\n    transform: translate(15px, -5px);\n}\n}\ndiv.label {\n  font-family: ConquerorSans, sans-serif;\n  font-size: 21px;\n  -webkit-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n  -moz-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n  box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n  width: 398px;\n  color: #00a095;\n  /*height: 34px;*/\n  padding: 3px 12px;\n  position: absolute;\n  /*line-height: 34px;*/\n  border-radius: 2px;\n  border-bottom: 2px solid #00a095;\n  background-color: white;\n}\ndiv.label.label-over-trapped-label {\n    background-color: #f0f0f0;\n}\ndiv.label.trapped {\n    -webkit-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n    -moz-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n    box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n}\ndiv.label.wrong {\n    border-bottom-color: #f48154;\n    -webkit-animation: wrong-label .4s forwards;\n    /* Safari 4+ */\n    -moz-animation: wrong-label .4s forwards;\n    /* Fx 5+ */\n    -o-animation: wrong-label .4s forwards;\n    /* Opera 12+ */\n    animation: wrong-label .4s forwards;\n    /* IE 10+, Fx 29+ */\n    -webkit-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n    -moz-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n    box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n}\ndiv.label.correct {\n    border-bottom-color: #13ebdc;\n    color: black;\n}\ndiv.label:hover {\n    cursor: pointer;\n    border-bottom-color: #ffe66c;\n}\ndiv.label:hover:not(.ui-draggable-dragging) {\n    cursor: url(" + escape(__webpack_require__(44)) + "), pointer;\n}\ndiv.label.ui-draggable-dragging {\n    -webkit-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    -moz-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    -o-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    cursor: url(" + escape(__webpack_require__(45)) + "), pointer;\n}\n#LabelDrag-wrapper {\n  position: relative;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n#LabelDrag-wrapper > #traps > div {\n    display: flex;\n    align-items: center;\n    flex-direction: row;\n}\n#LabelDrag-wrapper > #traps > div:not(:last-child) {\n      margin-bottom: 22px;\n}\n#LabelDrag-wrapper > #traps > div > .index {\n      margin-right: 12px;\n      font-size: 15px;\n      font-family: ConquerorSansBold, sans-serif;\n      font-weight: normal;\n}\n#LabelDrag-wrapper > #traps > div > .trap {\n      -webkit-border-radius: 3px;\n      -moz-border-radius: 3px;\n      border-radius: 3px;\n      width: 422px;\n      min-height: 36px;\n      box-shadow: inset 0 2px 2px 2px #e9e9e9;\n      background-color: #f9f9f9;\n}\n#LabelDrag-wrapper > #traps > div > .trap.disabled {\n        box-shadow: none;\n        background-color: white;\n}\n#LabelDrag-wrapper > #traps > div > .trap.ui-droppable-hover {\n        box-shadow: inset 0 2px 2px 2px #e4ce60;\n        background-color: #ffe66c;\n}\n#LabelDrag-wrapper > #labels {\n    display: flex;\n    align-items: center;\n    flex-direction: column;\n}\n#LabelDrag-wrapper > #labels > div.label-wrapper {\n      width: 422px;\n      height: 36px;\n}\n#LabelDrag-wrapper > #labels > div.label-wrapper:not(:last-child) {\n        margin-bottom: 22px;\n}\n", ""]);
+exports.push([module.i, "\ndiv, h1, h2, span, button, ul, li {\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n@keyframes wrong-label {\n100% {\n    transform: translate(15px, -5px);\n}\n}\ndiv.label {\n  font-family: ConquerorSans, sans-serif;\n  font-size: 21px;\n  -webkit-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n  -moz-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n  box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n  width: 398px;\n  color: #00a095;\n  /*height: 34px;*/\n  padding: 3px 12px;\n  position: absolute;\n  /*line-height: 34px;*/\n  border-radius: 2px;\n  border-bottom: 2px solid #00a095;\n  background-color: white;\n}\ndiv.label.label-over-trapped-label {\n    background-color: #f0f0f0;\n}\ndiv.label.trapped {\n    -webkit-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n    -moz-box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n    box-shadow: 0 0 0 1px rgba(50, 50, 50, 0.1);\n}\ndiv.label.wrong {\n    border-bottom-color: #f48154;\n    -webkit-animation: wrong-label .4s forwards;\n    /* Safari 4+ */\n    -moz-animation: wrong-label .4s forwards;\n    /* Fx 5+ */\n    -o-animation: wrong-label .4s forwards;\n    /* Opera 12+ */\n    animation: wrong-label .4s forwards;\n    /* IE 10+, Fx 29+ */\n    -webkit-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n    -moz-box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n    box-shadow: 1px 1px 6px 0 rgba(90, 90, 90, 0.2);\n}\ndiv.label.correct {\n    border-bottom-color: #13ebdc;\n    color: black;\n}\ndiv.label:hover {\n    cursor: pointer;\n    border-bottom-color: #ffe66c;\n}\ndiv.label:hover:not(.ui-draggable-dragging) {\n    cursor: url(" + escape(__webpack_require__(44)) + "), pointer;\n}\ndiv.label.ui-draggable-dragging {\n    -webkit-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    -moz-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    -o-box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    box-shadow: 2px 2px 10px 3px rgba(50, 50, 50, 0.1);\n    cursor: url(" + escape(__webpack_require__(45)) + "), pointer;\n}\n#LabelDrag-wrapper {\n  position: relative;\n  width: 100%;\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n#LabelDrag-wrapper > #traps > div {\n    display: flex;\n    align-items: center;\n    flex-direction: row;\n}\n#LabelDrag-wrapper > #traps > div:not(:last-child) {\n      margin-bottom: 22px;\n}\n#LabelDrag-wrapper > #traps > div > .index {\n      margin-right: 12px;\n      font-size: 15px;\n      font-family: ConquerorSansBold, sans-serif;\n      font-weight: normal;\n}\n#LabelDrag-wrapper > #traps > div > .trap {\n      -webkit-border-radius: 3px;\n      -moz-border-radius: 3px;\n      border-radius: 3px;\n      width: 422px;\n      min-height: 36px;\n      box-shadow: inset 0 2px 2px 2px #e9e9e9;\n      background-color: #f9f9f9;\n}\n#LabelDrag-wrapper > #traps > div > .trap.disabled {\n        box-shadow: none;\n        background-color: white;\n}\n#LabelDrag-wrapper > #traps > div > .trap.ui-droppable-hover {\n        box-shadow: inset 0 2px 2px 2px #e4ce60;\n        background-color: #ffe66c;\n}\n#LabelDrag-wrapper > #labels {\n    display: flex;\n    align-items: center;\n    flex-direction: column;\n}\n#LabelDrag-wrapper > #labels > div.label-wrapper {\n      width: 422px;\n      height: 36px;\n}\n#LabelDrag-wrapper > #labels > div.label-wrapper:not(:last-child) {\n        margin-bottom: 22px;\n}\n", ""]);
 
 // exports
 
@@ -26709,7 +26708,7 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_selector_type_script_index_0_app_workfield_vue__ = __webpack_require__(23);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_23ce36b6_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_template_compiler_preprocessor_engine_pug_node_modules_vue_loader_lib_selector_type_template_index_0_app_workfield_vue__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_23ce36b6_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_template_compiler_preprocessor_engine_pug_node_modules_vue_loader_lib_selector_type_template_index_0_app_workfield_vue__ = __webpack_require__(98);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -27134,7 +27133,7 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(108)
+  __webpack_require__(68)
 }
 var normalizeComponent = __webpack_require__(5)
 /* script */
@@ -27180,8 +27179,46 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 68 */,
-/* 69 */,
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(69);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("357434d8", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh2#app-step-header[data-v-2f370087] {\n  margin: 0;\n  height: 56px;\n  font-size: 23px;\n  font-family: ConquerorSans, sans-serif;\n  line-height: 28px;\n  font-weight: normal;\n}\nh2#app-step-header.final[data-v-2f370087] {\n    color: #24ddd0;\n    font-family: ConquerorSansBold, sans-serif;\n    font-weight: bold;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -27216,13 +27253,13 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_vue_loader_lib_selector_type_script_index_0_label_choose_vue__ = __webpack_require__(28);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2c11d6f8_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_template_compiler_preprocessor_engine_pug_node_modules_vue_loader_lib_selector_type_template_index_0_label_choose_vue__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2c11d6f8_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_template_compiler_preprocessor_engine_pug_node_modules_vue_loader_lib_selector_type_template_index_0_label_choose_vue__ = __webpack_require__(97);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(72)
-  __webpack_require__(104)
-  __webpack_require__(106)
+  __webpack_require__(88)
+  __webpack_require__(90)
 }
 var normalizeComponent = __webpack_require__(5)
 /* script */
@@ -27393,39 +27430,118 @@ module.exports = __webpack_require__.p + "img/l3.svg";
 module.exports = __webpack_require__.p + "img/l3-hover.svg";
 
 /***/ }),
-/* 88 */,
-/* 89 */,
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(89);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("55b11282", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./label-choose.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./label-choose.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.answers-enter-active {\n  transition: .8s ease-out;\n}\n.answers-enter {\n  transform: translateY(400px);\n}\n.answers-leave-to {\n  opacity: 1;\n}\n.answers-leave-active {\n  transition: .3s ease-in;\n}\n.answers-leave {\n  opacity: 0;\n}\n.wrapper-enter-active {\n  transition: .8s ease-out;\n}\n.wrapper-enter {\n  transform: translateY(300px);\n}\n.wrapper-leave-to {\n  opacity: 1;\n}\n.wrapper-leave-active {\n  transition: .4s ease-in;\n}\n.wrapper-leave {\n  opacity: 0;\n}\n#final-P,\n#final-L,\n#final-E,\n#final-T {\n  position: absolute;\n  z-index: 100;\n}\n#final-P > div:first-child,\n  #final-L > div:first-child,\n  #final-E > div:first-child,\n  #final-T > div:first-child {\n    color: black;\n    padding: 0 16px;\n    z-index: 50;\n    font-size: 23px;\n    line-height: 34px;\n    font-family: \"ConquerorSansBold\", sans-serif;\n}\n#final-P > div:nth-child(3),\n  #final-P > div:nth-child(4),\n  #final-L > div:nth-child(3),\n  #final-L > div:nth-child(4),\n  #final-E > div:nth-child(3),\n  #final-E > div:nth-child(4),\n  #final-T > div:nth-child(3),\n  #final-T > div:nth-child(4) {\n    position: absolute;\n}\n#final-P {\n  left: 1504px;\n  transform: rotate(-1deg);\n  z-index: 4;\n  top: 130px;\n}\n#final-E {\n  left: 1064px;\n  transform: rotate(6deg);\n  top: 290px;\n}\n#final-E > .e3 {\n    left: 96px;\n    transform: rotate(19deg);\n}\n#final-L {\n  left: 1424px;\n  transform: rotate(-8deg);\n  top: 360px;\n}\n#final-L > .l1 {\n    z-index: -1;\n    top: -32px;\n    left: -40px;\n}\n#final-T {\n  left: 1684px;\n  transform: rotate(10deg);\n  top: 305px;\n}\n#final-T > .tr1 {\n    top: 18px;\n    left: -40px;\n}\n#final-T > .tr2 {\n    right: -26px;\n    bottom: -16px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "img/wave-back.svg";
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(91);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("7ffa9954", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=2!./label-choose.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=2!./label-choose.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "img/wave-back-hover.svg";
+var escape = __webpack_require__(3);
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n#river-static[data-v-2c11d6f8], #river-front[data-v-2c11d6f8], #river-back[data-v-2c11d6f8] {\n  position: absolute;\n  width: 100%;\n}\n#river-back[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(92)) + ");\n  height: 108px;\n  bottom: 150px;\n  z-index: 4;\n}\n#river-back.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(93)) + ");\n}\n#river-front[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(94)) + ");\n  height: 105px;\n  bottom: 150px;\n  z-index: 5;\n}\n#river-front.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(95)) + ");\n}\n#river-static[data-v-2c11d6f8] {\n  height: 450px;\n  bottom: -300px;\n  position: absolute;\n  background-color: #faecd7;\n  z-index: 5;\n}\n#river-static.hover[data-v-2c11d6f8] {\n    background-color: #fff4bf;\n}\ndiv.label-answer[data-v-2c11d6f8] {\n  color: #00a095;\n  cursor: pointer;\n  border: #86d1cc 1px solid;\n  font-size: 23px;\n  line-height: 35px;\n  border-radius: 3px;\n  text-align: center;\n  font-family: ConquerorSans, sans-serif;\n  border-bottom: #00a095 2px solid;\n}\ndiv.label-answer[data-v-2c11d6f8]:first-child {\n    width: 110px;\n}\ndiv.label-answer[data-v-2c11d6f8]:not(:first-child) {\n    width: 160px;\n}\ndiv.label-answer[data-v-2c11d6f8]:hover {\n    border-color: #daf1ef;\n    border-bottom-color: #ffe66c;\n}\ndiv.label-answer[data-v-2c11d6f8]:active {\n    border: 2px solid #00a095;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.wrong[data-v-2c11d6f8] {\n    border: 2px solid #f48154;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.correct[data-v-2c11d6f8] {\n    border: 2px solid #13ebdc;\n    margin: -1px -1px 0 -1px;\n}\ndiv#LabelChoose-wrapper[data-v-2c11d6f8] {\n  z-index: 10;\n  top: 68px;\n  left: -1054px;\n  right: 0;\n  width: 3000px;\n  bottom: 0;\n  position: absolute;\n}\ndiv#LabelChoose-wrapper > #answers[data-v-2c11d6f8] {\n    top: 128px;\n    left: 1054px;\n    width: 676px;\n    display: flex;\n    position: relative;\n    justify-content: space-between;\n}\n", ""]);
+
+// exports
+
 
 /***/ }),
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "img/wave-front.svg";
+module.exports = __webpack_require__.p + "img/wave-back.svg";
 
 /***/ }),
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "img/wave-front-hover.svg";
+module.exports = __webpack_require__.p + "img/wave-back-hover.svg";
 
 /***/ }),
 /* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "img/wave-front.svg";
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "img/wave-front-hover.svg";
+
+/***/ }),
+/* 96 */
 /***/ (function(module, exports) {
 
 module.exports = {"fallDuration":800,"swimDuration":2000,"finishDuration":900,"elements":{"zIndex":30,"T":25000,"oscillationOffset":20,"count":30,"offsetRatio":0.8,"space":{"upper":50,"lower":30},"offset":{"upper":90,"lower":0},"catch":{"place":{"top":340,"left":250},"offset":30},"riverBackTimeRatio":0.8},"highlightWrongTimeout":2000,"river":{"width":3000}}
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27626,7 +27742,7 @@ if (false) {
 }
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27744,7 +27860,7 @@ if (false) {
 }
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(6);
@@ -27756,7 +27872,7 @@ __webpack_require__(30);
 __webpack_require__(31);
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -27780,7 +27896,7 @@ return $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -27833,7 +27949,7 @@ return $.ui.plugin = {
 
 
 /***/ }),
-/* 100 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -27863,7 +27979,7 @@ return $.ui.safeBlur = function( element ) {
 
 
 /***/ }),
-/* 101 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
@@ -27912,20 +28028,20 @@ return $.ui.safeActiveElement = function( document ) {
 
 
 /***/ }),
-/* 102 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(6);
 __webpack_require__(12);
 __webpack_require__(13);
 __webpack_require__(14);
-__webpack_require__(103);
+__webpack_require__(105);
 __webpack_require__(10);
 __webpack_require__(30);
 __webpack_require__(31);
 
 /***/ }),
-/* 103 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -28428,127 +28544,6 @@ if ( $.uiBackCompat !== false ) {
 return $.ui.droppable;
 
 } ) );
-
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(105);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("55b11282", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./label-choose.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./label-choose.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.answers-enter-active {\n  transition: .8s ease-out;\n}\n.answers-enter {\n  transform: translateY(400px);\n}\n.answers-leave-to {\n  opacity: 1;\n}\n.answers-leave-active {\n  transition: .3s ease-in;\n}\n.answers-leave {\n  opacity: 0;\n}\n.wrapper-enter-active {\n  transition: .8s ease-out;\n}\n.wrapper-enter {\n  transform: translateY(300px);\n}\n.wrapper-leave-to {\n  opacity: 1;\n}\n.wrapper-leave-active {\n  transition: .4s ease-in;\n}\n.wrapper-leave {\n  opacity: 0;\n}\n#final-P,\n#final-L,\n#final-E,\n#final-T {\n  position: absolute;\n  z-index: 100;\n}\n#final-P > div:first-child,\n  #final-L > div:first-child,\n  #final-E > div:first-child,\n  #final-T > div:first-child {\n    color: black;\n    padding: 0 16px;\n    z-index: 50;\n    font-size: 23px;\n    line-height: 34px;\n    font-family: \"ConquerorSansBold\", sans-serif;\n}\n#final-P > div:nth-child(3),\n  #final-P > div:nth-child(4),\n  #final-L > div:nth-child(3),\n  #final-L > div:nth-child(4),\n  #final-E > div:nth-child(3),\n  #final-E > div:nth-child(4),\n  #final-T > div:nth-child(3),\n  #final-T > div:nth-child(4) {\n    position: absolute;\n}\n#final-P {\n  left: 1504px;\n  transform: rotate(-1deg);\n  z-index: 4;\n  top: 130px;\n}\n#final-E {\n  left: 1064px;\n  transform: rotate(6deg);\n  top: 290px;\n}\n#final-E > .e3 {\n    left: 96px;\n    transform: rotate(19deg);\n}\n#final-L {\n  left: 1424px;\n  transform: rotate(-8deg);\n  top: 360px;\n}\n#final-L > .l1 {\n    z-index: -1;\n    top: -32px;\n    left: -40px;\n}\n#final-T {\n  left: 1684px;\n  transform: rotate(10deg);\n  top: 305px;\n}\n#final-T > .tr1 {\n    top: 18px;\n    left: -40px;\n}\n#final-T > .tr2 {\n    right: -26px;\n    bottom: -16px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(107);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("7ffa9954", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=2!./label-choose.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c11d6f8\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=2!./label-choose.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var escape = __webpack_require__(3);
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n#river-static[data-v-2c11d6f8], #river-front[data-v-2c11d6f8], #river-back[data-v-2c11d6f8] {\n  position: absolute;\n  width: 100%;\n}\n#river-back[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(90)) + ");\n  height: 108px;\n  bottom: 150px;\n  z-index: 4;\n}\n#river-back.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(91)) + ");\n}\n#river-front[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(92)) + ");\n  height: 105px;\n  bottom: 150px;\n  z-index: 5;\n}\n#river-front.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(93)) + ");\n}\n#river-static[data-v-2c11d6f8] {\n  height: 450px;\n  bottom: -300px;\n  position: absolute;\n  background-color: #faecd7;\n  z-index: 5;\n}\n#river-static.hover[data-v-2c11d6f8] {\n    background-color: #fff4bf;\n}\ndiv.label-answer[data-v-2c11d6f8] {\n  color: #00a095;\n  cursor: pointer;\n  border: #86d1cc 1px solid;\n  font-size: 23px;\n  line-height: 35px;\n  border-radius: 3px;\n  text-align: center;\n  font-family: ConquerorSans, sans-serif;\n  border-bottom: #00a095 2px solid;\n}\ndiv.label-answer[data-v-2c11d6f8]:first-child {\n    width: 110px;\n}\ndiv.label-answer[data-v-2c11d6f8]:not(:first-child) {\n    width: 160px;\n}\ndiv.label-answer[data-v-2c11d6f8]:hover {\n    border-color: #daf1ef;\n    border-bottom-color: #ffe66c;\n}\ndiv.label-answer[data-v-2c11d6f8]:active {\n    border: 2px solid #00a095;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.wrong[data-v-2c11d6f8] {\n    border: 2px solid #f48154;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.correct[data-v-2c11d6f8] {\n    border: 2px solid #13ebdc;\n    margin: -1px -1px 0 -1px;\n}\ndiv#LabelChoose-wrapper[data-v-2c11d6f8] {\n  z-index: 10;\n  top: 68px;\n  left: -1054px;\n  right: 0;\n  width: 3000px;\n  bottom: 0;\n  position: absolute;\n}\ndiv#LabelChoose-wrapper > #answers[data-v-2c11d6f8] {\n    top: 128px;\n    left: 1054px;\n    width: 676px;\n    display: flex;\n    position: relative;\n    justify-content: space-between;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 108 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(109);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("357434d8", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2f370087\",\"scoped\":true,\"hasInlineConfig\":false}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./app-steps-header.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\nh2#app-step-header[data-v-2f370087] {\n  margin: 0;\n  height: 56px;\n  font-size: 23px;\n  font-family: ConquerorSans, sans-serif;\n  line-height: 28px;\n  font-weight: normal;\n}\nh2#app-step-header.final[data-v-2f370087] {\n    color: #24ddd0;\n    font-family: ConquerorSansBold, sans-serif;\n    font-weight: bold;\n}\n", ""]);
-
-// exports
 
 
 /***/ })

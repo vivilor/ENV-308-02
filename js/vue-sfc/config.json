@@ -1,0 +1,32 @@
+{
+  "fallDuration": 800,
+  "swimDuration": 2000,
+  "finishDuration": 900,
+  "elements": {
+    "zIndex": 30,
+    "T": 25000,
+    "oscillationOffset": 20,
+    "count": 30,
+    "offsetRatio": 0.8,
+    "space": {
+      "upper": 50,
+      "lower": 30
+    },
+    "offset": {
+      "upper": 90,
+      "lower": 0
+    },
+    "catch": {
+      "place": {
+        "top": 340,
+        "left": 250
+      },
+      "offset": 30
+    },
+    "riverBackTimeRatio": 0.8
+  },
+  "highlightWrongTimeout": 2000,
+  "river": {
+    "width": 3000
+  }
+}
