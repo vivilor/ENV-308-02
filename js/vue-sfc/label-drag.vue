@@ -104,6 +104,7 @@
           this.$pairSecondLabel
             .css(pos)
             .addClass(this.classes.correct)
+            .addClass(this.classes.trapped)
         );
         this.$pairSecondLabel.draggable();
       },

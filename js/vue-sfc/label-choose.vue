@@ -896,7 +896,6 @@
     top: 38px;
     left: ($river-width - $workfield-cropped) / 2;
     position: absolute;
-    width: 389px;
   }
   
   #question,
