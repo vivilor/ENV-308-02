@@ -24537,7 +24537,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
 
     calcPathForGrowAnimaion() {
       let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-      let smallLabelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+      let smallLabelHeight = this.calcLabelHeight(this.$label(5));
       console.log(tallLabelHeight);
       let heightShift =
         __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.labels[0].space +
@@ -24550,7 +24550,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
 
     calcPathForOtherLabelsShiftAnimation() {
       let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-      let smallLabelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+      let smallLabelHeight = this.calcLabelHeight(this.$label(5));
       let spaceBetweenLabels = (__WEBPACK_IMPORTED_MODULE_2__config_json___default.a.labels[0].space - smallLabelHeight);
       let topShift =
         tallLabelHeight * 2 -
@@ -24563,7 +24563,7 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
     
     calcPathForPairShiftAnimation() {
       let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-      let smallLagelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+      let smallLagelHeight = this.calcLabelHeight(this.$label(5));
       let topShift =
         tallLabelHeight +
         __WEBPACK_IMPORTED_MODULE_2__config_json___default.a.labels[0].space -
@@ -24788,7 +24788,6 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
       return this.$label(this.trapped[trapIndex]);
     },
     
-
     removeLabels() {
       $(`.${this.classes.label}`).remove();
       
@@ -24934,8 +24933,8 @@ module.exports = __webpack_require__.p + "fonts/ConquerorSans-Bold/ConquerorSans
       if (this.complete) {
         this.eventBus.$emit(__WEBPACK_IMPORTED_MODULE_0__events__["a" /* default */].validation.finish);
         this.eventBus.$emit(__WEBPACK_IMPORTED_MODULE_0__events__["a" /* default */].step.parseData, this.getSequence());
-        this.removeWrongLabels();
         this.disposePair();
+        this.removeWrongLabels();
         this.disableDragAndDropFunctionality();
       }
     },
@@ -27340,7 +27339,7 @@ exports = module.exports = __webpack_require__(1)(false);
 exports.i(__webpack_require__(8), "");
 
 // module
-exports.push([module.i, "\n.tr1 {\n  background-image: url(" + escape(__webpack_require__(74)) + ");\n  width: 64px;\n  height: 50px;\n}\n.tr1.hover {\n    background-image: url(" + escape(__webpack_require__(75)) + ");\n}\n.tr2 {\n  background-image: url(" + escape(__webpack_require__(76)) + ");\n  width: 44px;\n  height: 50px;\n}\n.tr2.hover {\n    background-image: url(" + escape(__webpack_require__(77)) + ");\n}\n.e1 {\n  background-image: url(" + escape(__webpack_require__(78)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e1.hover {\n    background-image: url(" + escape(__webpack_require__(79)) + ");\n}\n.e2 {\n  background-image: url(" + escape(__webpack_require__(80)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e2.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.e3 {\n  background-image: url(" + escape(__webpack_require__(81)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e3.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.l1 {\n  background-image: url(" + escape(__webpack_require__(82)) + ");\n  width: 81px;\n  height: 82px;\n}\n.l1.hover {\n    background-image: url(" + escape(__webpack_require__(83)) + ");\n}\n.l2 {\n  background-image: url(" + escape(__webpack_require__(84)) + ");\n  width: 82px;\n  height: 81px;\n}\n.l2.hover {\n    background-image: url(" + escape(__webpack_require__(85)) + ");\n}\n.l3 {\n  background-image: url(" + escape(__webpack_require__(86)) + ");\n  width: 77px;\n  height: 76px;\n}\n.l3.hover {\n    background-image: url(" + escape(__webpack_require__(87)) + ");\n}\ndiv.wrap {\n  position: absolute;\n  z-index: 30;\n}\n#question {\n  top: 38px;\n  left: 1054px;\n  position: absolute;\n  line-height: 34px;\n}\n#question,\n#final-P > div:nth-child(2),\n#final-L > div:nth-child(2),\n#final-E > div:nth-child(2),\n#final-T > div:nth-child(2) {\n  color: black;\n  border: 1px solid #f0f0f0;\n  display: inline-block;\n  padding: 0 16px;\n  z-index: 50;\n  font-size: 23px;\n  font-family: \"ConquerorSans\", sans-serif;\n  background-color: white;\n}\n", ""]);
+exports.push([module.i, "\n.tr1 {\n  background-image: url(" + escape(__webpack_require__(74)) + ");\n  width: 64px;\n  height: 50px;\n}\n.tr1.hover {\n    background-image: url(" + escape(__webpack_require__(75)) + ");\n}\n.tr2 {\n  background-image: url(" + escape(__webpack_require__(76)) + ");\n  width: 44px;\n  height: 50px;\n}\n.tr2.hover {\n    background-image: url(" + escape(__webpack_require__(77)) + ");\n}\n.e1 {\n  background-image: url(" + escape(__webpack_require__(78)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e1.hover {\n    background-image: url(" + escape(__webpack_require__(79)) + ");\n}\n.e2 {\n  background-image: url(" + escape(__webpack_require__(80)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e2.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.e3 {\n  background-image: url(" + escape(__webpack_require__(81)) + ");\n  width: 90px;\n  height: 49px;\n}\n.e3.hover {\n    background-image: url(" + escape(__webpack_require__(27)) + ");\n}\n.l1 {\n  background-image: url(" + escape(__webpack_require__(82)) + ");\n  width: 81px;\n  height: 82px;\n}\n.l1.hover {\n    background-image: url(" + escape(__webpack_require__(83)) + ");\n}\n.l2 {\n  background-image: url(" + escape(__webpack_require__(84)) + ");\n  width: 82px;\n  height: 81px;\n}\n.l2.hover {\n    background-image: url(" + escape(__webpack_require__(85)) + ");\n}\n.l3 {\n  background-image: url(" + escape(__webpack_require__(86)) + ");\n  width: 77px;\n  height: 76px;\n}\n.l3.hover {\n    background-image: url(" + escape(__webpack_require__(87)) + ");\n}\ndiv.wrap {\n  position: absolute;\n  z-index: 30;\n}\n#question {\n  top: 38px;\n  left: 1054px;\n  position: absolute;\n  width: 389px;\n}\n#question,\n#final-P > div:nth-child(2),\n#final-L > div:nth-child(2),\n#final-E > div:nth-child(2),\n#final-T > div:nth-child(2) {\n  color: black;\n  border: 1px solid #f0f0f0;\n  padding: 5px 16px 10px;\n  z-index: 50;\n  font-size: 23px;\n  line-height: 24px;\n  font-family: \"ConquerorSans\", sans-serif;\n  background-color: white;\n}\n", ""]);
 
 // exports
 
@@ -27505,7 +27504,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n#river-static[data-v-2c11d6f8], #river-front[data-v-2c11d6f8], #river-back[data-v-2c11d6f8] {\n  position: absolute;\n  width: 100%;\n}\n#river-back[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(92)) + ");\n  height: 108px;\n  bottom: 150px;\n  z-index: 4;\n}\n#river-back.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(93)) + ");\n}\n#river-front[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(94)) + ");\n  height: 105px;\n  bottom: 150px;\n  z-index: 5;\n}\n#river-front.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(95)) + ");\n}\n#river-static[data-v-2c11d6f8] {\n  height: 450px;\n  bottom: -300px;\n  position: absolute;\n  background-color: #faecd7;\n  z-index: 5;\n}\n#river-static.hover[data-v-2c11d6f8] {\n    background-color: #fff4bf;\n}\ndiv.label-answer[data-v-2c11d6f8] {\n  color: #00a095;\n  cursor: pointer;\n  border: #86d1cc 1px solid;\n  font-size: 23px;\n  line-height: 35px;\n  border-radius: 3px;\n  text-align: center;\n  font-family: ConquerorSans, sans-serif;\n  border-bottom: #00a095 2px solid;\n}\ndiv.label-answer[data-v-2c11d6f8]:first-child {\n    width: 110px;\n}\ndiv.label-answer[data-v-2c11d6f8]:not(:first-child) {\n    width: 160px;\n}\ndiv.label-answer[data-v-2c11d6f8]:hover {\n    border-color: #daf1ef;\n    border-bottom-color: #ffe66c;\n}\ndiv.label-answer[data-v-2c11d6f8]:active {\n    border: 2px solid #00a095;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.wrong[data-v-2c11d6f8] {\n    border: 2px solid #f48154;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.correct[data-v-2c11d6f8] {\n    border: 2px solid #13ebdc;\n    margin: -1px -1px 0 -1px;\n}\ndiv#LabelChoose-wrapper[data-v-2c11d6f8] {\n  z-index: 10;\n  top: 68px;\n  left: -1054px;\n  right: 0;\n  width: 3000px;\n  bottom: 0;\n  position: absolute;\n}\ndiv#LabelChoose-wrapper > #answers[data-v-2c11d6f8] {\n    top: 128px;\n    left: 1054px;\n    width: 676px;\n    display: flex;\n    position: relative;\n    justify-content: space-between;\n}\n", ""]);
+exports.push([module.i, "\n#river-static[data-v-2c11d6f8], #river-front[data-v-2c11d6f8], #river-back[data-v-2c11d6f8] {\n  position: absolute;\n  width: 100%;\n}\n#river-back[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(92)) + ");\n  height: 108px;\n  bottom: 150px;\n  z-index: 4;\n}\n#river-back.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(93)) + ");\n}\n#river-front[data-v-2c11d6f8] {\n  background-image: url(" + escape(__webpack_require__(94)) + ");\n  height: 105px;\n  bottom: 150px;\n  z-index: 5;\n}\n#river-front.hover[data-v-2c11d6f8] {\n    background-image: url(" + escape(__webpack_require__(95)) + ");\n}\n#river-static[data-v-2c11d6f8] {\n  height: 2150px;\n  bottom: -2000px;\n  position: absolute;\n  background-color: #faecd7;\n  z-index: 5;\n}\n#river-static.hover[data-v-2c11d6f8] {\n    background-color: #fff4bf;\n}\ndiv.label-answer[data-v-2c11d6f8] {\n  color: #00a095;\n  cursor: pointer;\n  border: #86d1cc 1px solid;\n  font-size: 23px;\n  line-height: 35px;\n  border-radius: 3px;\n  text-align: center;\n  font-family: ConquerorSans, sans-serif;\n  border-bottom: #00a095 2px solid;\n}\ndiv.label-answer[data-v-2c11d6f8]:first-child {\n    width: 110px;\n}\ndiv.label-answer[data-v-2c11d6f8]:not(:first-child) {\n    width: 160px;\n}\ndiv.label-answer[data-v-2c11d6f8]:hover {\n    border-color: #daf1ef;\n    border-bottom-color: #ffe66c;\n}\ndiv.label-answer[data-v-2c11d6f8]:active {\n    border: 2px solid #00a095;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.wrong[data-v-2c11d6f8] {\n    border: 2px solid #f48154;\n    margin: -1px -1px 0 -1px;\n}\ndiv.label-answer.correct[data-v-2c11d6f8] {\n    border: 2px solid #13ebdc;\n    margin: -1px -1px 0 -1px;\n}\ndiv#LabelChoose-wrapper[data-v-2c11d6f8] {\n  z-index: 10;\n  top: 68px;\n  left: -1054px;\n  right: 0;\n  width: 3000px;\n  bottom: 0;\n  position: absolute;\n}\ndiv#LabelChoose-wrapper > #answers[data-v-2c11d6f8] {\n    top: 128px;\n    left: 1054px;\n    width: 676px;\n    display: flex;\n    position: relative;\n    justify-content: space-between;\n}\n", ""]);
 
 // exports
 

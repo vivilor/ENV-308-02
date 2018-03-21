@@ -896,7 +896,7 @@
     top: 38px;
     left: ($river-width - $workfield-cropped) / 2;
     position: absolute;
-    line-height: 34px;
+    width: 389px;
   }
   
   #question,
@@ -906,10 +906,10 @@
   #final-T > div:nth-child(2) {
     color: black;
     border: 1px solid #f0f0f0;
-    display: inline-block;
-    padding: 0 16px;
+    padding: 5px 16px 10px;
     z-index: 50;
     font-size: 23px;
+    line-height: 24px;
     font-family: "ConquerorSans", sans-serif;
     background-color: white;
   }

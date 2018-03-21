@@ -1,7 +1,8 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 const PACKAGE = require('./package.json');
 const path = require('path');
-
+const PreloadWebpackPlugin = require("preload-webpack-plugin");
 const ExtractCSS = new ExtractTextPlugin(PACKAGE.name + '.styles.css');
 
 module.exports = {
@@ -55,6 +56,16 @@ module.exports = {
     }
   },
   plugins: [
-    ExtractCSS
+    ExtractCSS,
+    new HTMLWebpackPlugin({
+      inject: false,
+      title: PACKAGE.name + " | " + PACKAGE.version,
+      template: "./js/iframe-tpl.ejs"
+    }),
+    new HTMLWebpackPlugin({
+      inject: true,
+      filename: PACKAGE.name + ".html",
+      template: "./js/app-tpl.ejs"
+    })
   ]
 };

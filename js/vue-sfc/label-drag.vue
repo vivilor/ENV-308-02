@@ -121,7 +121,7 @@
   
       calcPathForGrowAnimaion() {
         let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-        let smallLabelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+        let smallLabelHeight = this.calcLabelHeight(this.$label(5));
         console.log(tallLabelHeight);
         let heightShift =
           Config.labels[0].space +
@@ -134,7 +134,7 @@
   
       calcPathForOtherLabelsShiftAnimation() {
         let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-        let smallLabelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+        let smallLabelHeight = this.calcLabelHeight(this.$label(5));
         let spaceBetweenLabels = (Config.labels[0].space - smallLabelHeight);
         let topShift =
           tallLabelHeight * 2 -
@@ -147,7 +147,7 @@
       
       calcPathForPairShiftAnimation() {
         let tallLabelHeight = this.calcLabelHeight(this.$pairSecondLabel);
-        let smallLagelHeight = this.calcLabelHeight(this.$label(this.trapped[1]));
+        let smallLagelHeight = this.calcLabelHeight(this.$label(5));
         let topShift =
           tallLabelHeight +
           Config.labels[0].space -
@@ -372,7 +372,6 @@
         return this.$label(this.trapped[trapIndex]);
       },
       
-  
       removeLabels() {
         $(`.${this.classes.label}`).remove();
         
@@ -518,8 +517,8 @@
         if (this.complete) {
           this.eventBus.$emit(VueEvents.validation.finish);
           this.eventBus.$emit(VueEvents.step.parseData, this.getSequence());
-          this.removeWrongLabels();
           this.disposePair();
+          this.removeWrongLabels();
           this.disableDragAndDropFunctionality();
         }
       },

@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+<link href="308-02.styles.css" rel="stylesheet"></head>
+<body>
+  <script>
+    var images = [];
+    function preload() {
+      for (var i = 0; i < arguments.length; i++) {
+        images[i] = new Image();
+        images[i].src = preload.arguments[i];
+      }
+    }
+    preload(
+      "img/check.svg",
+      "img/ConquerorSans.svg",
+      "img/ConquerorSans-Bold.svg",
+      "img/ConquerorSans-ExtraBold.svg",
+      "img/e1.svg",
+      "img/e1-hover.svg",
+      "img/e2.svg",
+      "img/e2_3-hover.svg",
+      "img/e3.svg",
+      "img/grab.png",
+      "img/grabbing.png",
+      "img/l1.svg",
+      "img/l1-hover.svg",
+      "img/l2.svg",
+      "img/l2-hover.svg",
+      "img/l3.svg",
+      "img/l3-hover.svg",
+      "img/reload.svg",
+      "img/reload-hover.svg",
+      "img/tr1.svg",
+      "img/tr1-hover.svg",
+      "img/tr2.svg",
+      "img/tr2-hover.svg",
+      "img/wave-back.svg",
+      "img/wave-back-hover.svg",
+      "img/wave-front.svg",
+      "img/wave-front-hover.svg"
+    )
+
+  </script>
+  <div id="app">
+    <app-workfield></app-workfield>
+  </div>
+<script type="text/javascript" src="308-02.bundle.js"></script></body>
+</html>
